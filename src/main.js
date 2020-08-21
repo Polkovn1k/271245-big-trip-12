@@ -27,6 +27,7 @@ render(tripControlsElement, createFilterTemplate(), `beforeEnd`);
 render(tripControlsTitleElement, createMenuTemplate(), `afterEnd`);
 
 
+
 const tripEventsElement = document.querySelector(`.trip-events`);
 const tripEventsTitleElement = tripEventsElement.querySelector(`.trip-events h2:first-child`);
 render(tripEventsTitleElement, createSortTemplate(), `afterEnd`);
