@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractView from "./abstract.js";
 
 const createInfoContainerTemplate = () => {
   return (
@@ -6,24 +6,8 @@ const createInfoContainerTemplate = () => {
   );
 };
 
-export class InfoContainer {
-  constructor() {
-    this._elem = null;
-  }
-
+export class InfoContainer extends AbstractView {
   getTemplate() {
     return createInfoContainerTemplate();
-  }
-
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
   }
 }

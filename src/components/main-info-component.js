@@ -1,5 +1,5 @@
 import {MONTH_NAMES} from '../const';
-import {createElement} from '../utils';
+import AbstractView from "./abstract.js";
 
 const generateTitle = (array) => {
   if (array.length === 1) {
@@ -35,25 +35,13 @@ const createMainInfoTemplate = (eventsArray) => {
   );
 };
 
-export class MainInfo {
+export class MainInfo extends AbstractView {
   constructor(data) {
+    super();
     this._infoData = data;
-    this._elem = null;
   }
 
   getTemplate() {
     return createMainInfoTemplate(this._infoData);
-  }
-
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
   }
 }

@@ -1,5 +1,6 @@
 import {ACTIVITY_TYPE} from '../const';
-import {formatTime, timeDuration, checkEventType, createElement} from '../utils';
+import {formatTime, timeDuration, checkEventType} from '../utils';
+import AbstractView from "./abstract.js";
 
 const getEventSelectedOffersTemplate = (offerData) => {
   return offerData
@@ -51,25 +52,25 @@ const createTripEventItemTemplate = (obj) => {
   );
 };
 
-export class TripEventItem {
+export class TripEventItem extends AbstractView {
   constructor(data) {
+    super();
     this._tripEventItemData = data;
-    this._elem = null;
+
+    this._rollupClickHandler = this._rollupClickHandler.bind(this);
   }
 
   getTemplate() {
     return createTripEventItemTemplate(this._tripEventItemData);
   }
 
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
+  _rollupClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick();
   }
 
-  removeElement() {
-    this._elem = null;
+  setRollupClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollupClickHandler);
   }
 }
