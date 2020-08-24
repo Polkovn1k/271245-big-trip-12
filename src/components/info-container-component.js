@@ -6,7 +6,7 @@ const createInfoContainerTemplate = () => {
   );
 };
 
-export class InfoContainer extends AbstractView {
+export default class InfoContainer extends AbstractView {
   getTemplate() {
     return createInfoContainerTemplate();
   }

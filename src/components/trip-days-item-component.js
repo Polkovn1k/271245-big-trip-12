@@ -15,7 +15,7 @@ const createTripDaysItemTemplate = (tripDay, count) => {
   );
 };
 
-export class TripDaysItem extends AbstractView {
+export default class TripDaysItem extends AbstractView {
   constructor(data, count) {
     super();
     this._tripDaysItemData = data;

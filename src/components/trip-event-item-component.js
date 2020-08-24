@@ -52,7 +52,7 @@ const createTripEventItemTemplate = (obj) => {
   );
 };
 
-export class TripEventItem extends AbstractView {
+export default class TripEventItem extends AbstractView {
   constructor(data) {
     super();
     this._tripEventItemData = data;

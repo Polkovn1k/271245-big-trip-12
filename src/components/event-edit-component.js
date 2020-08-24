@@ -140,7 +140,7 @@ const createEventEditTemplate = (obj) => {
   );
 };
 
-export class TripEventEditItem extends AbstractView {
+export default class TripEventEditItem extends AbstractView {
   constructor(data) {
     super();
     this._tripEventEditItemData = data;

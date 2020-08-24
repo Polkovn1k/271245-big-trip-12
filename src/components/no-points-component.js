@@ -6,7 +6,7 @@ const createNoPointsTemplate = () => {
   );
 };
 
-export class NoPoints extends AbstractView {
+export default class NoPoints extends AbstractView {
   getTemplate() {
     return createNoPointsTemplate();
   }

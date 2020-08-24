@@ -35,7 +35,7 @@ const createMainInfoTemplate = (eventsArray) => {
   );
 };
 
-export class MainInfo extends AbstractView {
+export default class MainInfo extends AbstractView {
   constructor(data) {
     super();
     this._infoData = data;

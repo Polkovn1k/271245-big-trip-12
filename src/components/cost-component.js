@@ -8,7 +8,7 @@ const createCostTemplate = () => {
   );
 };
 
-export class Cost extends AbstractView {
+export default class Cost extends AbstractView {
   getTemplate() {
     return createCostTemplate();
   }
