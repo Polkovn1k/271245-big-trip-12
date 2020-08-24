@@ -1,4 +1,4 @@
-import {getRandomItemsFromArray, getRandomInt} from '../utils';
+import {getRandomItemsFromArray, getRandomInt} from '../utils/common';
 
 const DESCRIPTION_AND_PHOTO_MAX_ITEMS = 5;
 

@@ -1,4 +1,4 @@
-import {getRandom} from '../utils';
+import {getRandom} from '../utils/common';
 
 const dateSettings = {
   MAX_INTERVAL_FOR_START_DAY: 15,

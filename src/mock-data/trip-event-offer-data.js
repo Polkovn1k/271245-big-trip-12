@@ -1,4 +1,4 @@
-import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils';
+import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils/common';
 
 const MAX_TITLE_ITEMS = 5;
 

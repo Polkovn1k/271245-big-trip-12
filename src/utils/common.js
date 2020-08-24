@@ -46,17 +46,6 @@ const checkEventType = (type, arr) => {
   return isActivityType ? `in` : `to`;
 };
 
-const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-const render = (container, element, place) => {
-  container.insertAdjacentElement(place, element);
-};
-
 export {
   getRandomItemFromArray,
   getRandomItemsFromArray,
@@ -68,6 +57,4 @@ export {
   formatTime,
   timeDuration,
   checkEventType,
-  createElement,
-  render,
 };

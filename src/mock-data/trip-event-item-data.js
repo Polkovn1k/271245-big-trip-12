@@ -1,4 +1,4 @@
-import {getRandomItemFromArray, getRandomNumberFromInterval} from '../utils';
+import {getRandomItemFromArray, getRandomNumberFromInterval} from '../utils/common';
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION, RANDOM_PRICE_SETTINGS} from '../const';
 import {generateTripEventOfferData} from './trip-event-offer-data';
 import {generateTripEventDateData} from "./trip-event-date-data";

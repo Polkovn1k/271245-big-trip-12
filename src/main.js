@@ -1,5 +1,5 @@
 import {RENDER_POSITION} from './const';
-import {render} from './utils';
+import {render, replace} from './utils/render';
 import {InfoContainer} from './components/info-container-component';
 import {MainInfo} from './components/main-info-component';
 import {Cost} from './components/cost-component';
@@ -22,10 +22,10 @@ const tripEventsTitle = tripEvents.querySelector(`.trip-events h2:first-child`);
 
 const renderInfo = (infoData) => {
   const infoContainer = new InfoContainer();
-  render(tripMain, infoContainer.getElement(), RENDER_POSITION.AFTERBEGIN);
-  render(infoContainer.getElement(), new Cost().getElement(), RENDER_POSITION.BEFOREEND);
+  render(tripMain, infoContainer, RENDER_POSITION.AFTERBEGIN);
+  render(infoContainer, new Cost(), RENDER_POSITION.BEFOREEND);
   if (infoData.length) {
-    render(tripMain, new MainInfo(infoData).getElement(), RENDER_POSITION.AFTERBEGIN);
+    render(tripMain, new MainInfo(infoData), RENDER_POSITION.AFTERBEGIN);
   }
 };
 
@@ -33,24 +33,24 @@ const renderTripMainControls = () => {
   const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
   const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
 
-  render(tripMainControls, new Filter().getElement(), RENDER_POSITION.BEFOREEND);
-  render(tripMainControlsTitle, new Menu().getElement(), RENDER_POSITION.AFTEREND);
+  render(tripMainControls, new Filter(), RENDER_POSITION.BEFOREEND);
+  render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
 };
 
 const renderTripDays = (tripDays) => {
   const tripDaysList = new TripDaysList();
-  render(tripEventsTitle, tripDaysList.getElement(), RENDER_POSITION.AFTEREND);
+  render(tripEventsTitle, tripDaysList, RENDER_POSITION.AFTEREND);
 
   Array.from(tripDays)
     .forEach((item, i) => {
-      render(tripDaysList.getElement(), new TripDaysItem(item, i + 1).getElement(), RENDER_POSITION.BEFOREEND);
+      render(tripDaysList, new TripDaysItem(item, i + 1), RENDER_POSITION.BEFOREEND);
     });
 };
 
 const renderTripEventItems = (tripDays) => {
   const tripDaysItem = tripEvents.querySelectorAll(`.trip-days__item`);
   tripDaysItem.forEach((item) => {
-    render(item, new TripEventList().getElement(), RENDER_POSITION.BEFOREEND);
+    render(item, new TripEventList(), RENDER_POSITION.BEFOREEND);
     const tripEventsList = item.querySelector(`.trip-events__list`);
 
     tripEventItems
@@ -69,11 +69,11 @@ const renderEvent = (eventsContainer, data) => {
   const tripEventEditItem = new TripEventEditItem(data);
 
   const replaceEventToEdit = () => {
-    eventsContainer.replaceChild(tripEventEditItem.getElement(), tripEventItem.getElement());
+    replace(tripEventEditItem, tripEventItem);
   };
 
   const replaceEditToEvent = () => {
-    eventsContainer.replaceChild(tripEventItem.getElement(), tripEventEditItem.getElement());
+    replace(tripEventItem, tripEventEditItem);
   };
 
   const onEscKeyDown = (evt) => {
@@ -95,21 +95,21 @@ const renderEvent = (eventsContainer, data) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(eventsContainer, tripEventItem.getElement(), RENDER_POSITION.BEFOREEND);
+  render(eventsContainer, tripEventItem, RENDER_POSITION.BEFOREEND);
 };
 
 const renderMainContent = (data) => {
   const tripDays = generateTripDays(data);
 
-  renderTripMainControls();
   renderInfo(data);
+  renderTripMainControls();
 
   if (!tripEventItems.length) {
-    render(tripEventsTitle, new NoPoints().getElement(), RENDER_POSITION.AFTEREND);
+    render(tripEventsTitle, new NoPoints(), RENDER_POSITION.AFTEREND);
     return;
   }
 
-  render(tripEventsTitle, new Sort().getElement(), RENDER_POSITION.BEFOREBEGIN);
+  render(tripEventsTitle, new Sort(), RENDER_POSITION.BEFOREBEGIN);
   renderTripDays(tripDays);
   renderTripEventItems(tripDays);
 };

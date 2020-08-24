@@ -1,5 +1,5 @@
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
-import {formatTime, checkEventType, castTimeFormat} from '../utils';
+import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
 import AbstractView from "./abstract.js";
 
 const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
