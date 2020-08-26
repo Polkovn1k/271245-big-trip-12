@@ -1,10 +1,5 @@
+import {SORT_TYPE} from '../const';
 import AbstractView from "./abstract.js";
-
-const SORT_TYPE = {
-  EVENT: `sort-event`,
-  TIME: `sort-time`,
-  PRICE: `sort-price`,
-};
 
 const createSortTemplate = () => {
   return (
@@ -45,6 +40,8 @@ export default class Sort extends AbstractView {
   constructor() {
     super();
     this._currentSortType = SORT_TYPE.EVENT;
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -55,24 +52,18 @@ export default class Sort extends AbstractView {
     return this._currentSortType;
   }
 
-  setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
+  _sortTypeChangeHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.tagName.toLowerCase() !== `label`) {
+      return;
+    }
 
-      if (evt.target.tagName.toLowerCase() !== `label`) {
-        return;
-      }
+    this._callback.sortTypeChange(evt.target.htmlFor);
+  }
 
-      const sortType = evt.target.htmlFor;
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      handler(this._currentSortType);
-    });
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
 
