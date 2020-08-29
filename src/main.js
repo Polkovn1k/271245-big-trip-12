@@ -5,7 +5,7 @@ import MainInfo from './components/main-info-component';
 import Cost from './components/cost-component';
 import Menu from './components/menu-component';
 import Filter from './components/filter-component';
-import TripPresenter from './presenter/trip';
+import TripsPresenter from './presenter/trips';
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 
 const TRIP_EVENT_ITEM_QUANTITY = 20;
@@ -35,7 +35,7 @@ const renderTripMainControls = () => {
 const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
   .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 
-const mainTripPresenter = new TripPresenter(tripEvents);
+const mainTripPresenter = new TripsPresenter(tripEvents);
 
 renderTripMainControls();
 renderInfo(tripEventItems);
