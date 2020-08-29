@@ -1,49 +1,43 @@
-import {createInfoTemplate} from './components/info-template';
-import {createCostTemplate} from './components/cost-template';
-import {createMenuTemplate} from './components/menu-template';
-import {createFilterTemplate} from './components/filter-template';
-import {createSortTemplate} from './components/sort-template';
-import {createEventEditTemplate} from './components/event-edit-template';
-import {createTripDaysListTemplate} from './components/trip-days-list-template';
-import {createTripDaysItemTemplate} from './components/trip-days-item-template';
-import {createTripEventsListTemplate} from './components/trip-events-list-template';
-import {createTripEventItemTemplate} from './components/trip-event-item-template';
+import {RENDER_POSITION} from './const';
+import {render} from './utils/render';
+import InfoContainer from './components/info-container-component';
+import MainInfo from './components/main-info-component';
+import Cost from './components/cost-component';
+import Menu from './components/menu-component';
+import Filter from './components/filter-component';
+import TripPresenter from './presenter/trip';
+import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 
-const TRIP_EVENT_ITEM_COUNT = 3;
+const TRIP_EVENT_ITEM_QUANTITY = 20;
+const tripMain = document.querySelector(`.trip-main`);
+const tripEvents = document.querySelector(`.trip-events`);
+const tripEventsTitle = tripEvents.querySelector(`.trip-events h2:first-child`);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+const renderInfo = (infoData) => {
+  const infoContainer = new InfoContainer();
+  render(tripMain, infoContainer, RENDER_POSITION.AFTERBEGIN);
+  render(infoContainer, new Cost(), RENDER_POSITION.BEFOREEND);
+  if (infoData.length) {
+    render(tripMain, new MainInfo(infoData), RENDER_POSITION.AFTERBEGIN);
+  }
 };
 
-const tripMainElement = document.querySelector(`.trip-main`);
-render(tripMainElement, createInfoTemplate(), `afterBegin`);
+const renderTripMainControls = () => {
+  const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
+  const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
 
-const tripInfoElement = tripMainElement.querySelector(`.trip-main__trip-info`);
-render(tripInfoElement, createCostTemplate(), `beforeEnd`);
-
-const tripControlsElement = tripMainElement.querySelector(`.trip-main__trip-controls`);
-const tripControlsTitleElement = tripMainElement.querySelector(`.trip-main__trip-controls h2:first-child`);
-render(tripControlsElement, createFilterTemplate(), `beforeEnd`);
-render(tripControlsTitleElement, createMenuTemplate(), `afterEnd`);
+  render(tripMainControls, new Filter(), RENDER_POSITION.BEFOREEND);
+  render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
+};
 
 
 
+const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
+  .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 
-const tripEventsElement = document.querySelector(`.trip-events`);
-const tripEventsTitleElement = tripEventsElement.querySelector(`.trip-events h2:first-child`);
-render(tripEventsTitleElement, createSortTemplate(), `afterEnd`);
-render(tripEventsElement, createEventEditTemplate(), `beforeEnd`);
-render(tripEventsElement, createTripDaysListTemplate(), `beforeEnd`);
+const mainTripPresenter = new TripPresenter(tripEvents);
 
-const tripDaysList = tripEventsElement.querySelector(`.trip-days`);
-render(tripDaysList, createTripDaysItemTemplate(), `afterBegin`);
-
-const tripDaysItem = tripDaysList.querySelector(`.trip-days__item`);
-render(tripDaysItem, createTripEventsListTemplate(), `beforeEnd`);
-
-const tripEventsList = tripDaysItem.querySelector(`.trip-events__list`);
-new Array(TRIP_EVENT_ITEM_COUNT)
-  .fill(``)
-  .forEach(() => {
-    render(tripEventsList, createTripEventItemTemplate(), `beforeEnd`);
-  });
+renderTripMainControls();
+renderInfo(tripEventItems);
+mainTripPresenter.init(tripEventItems);
+console.dir(tripEventItems);
