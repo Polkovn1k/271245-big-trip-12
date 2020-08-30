@@ -1,5 +1,6 @@
 import {RENDER_POSITION, SORT_TYPE} from '../const';
 import {render, replace} from '../utils/render';
+import {updateItem} from "../utils/common.js";
 import Sort from '../components/sort-component';
 import TripPresenter from './trip';
 import TripDaysList from '../components/trip-days-list-component';
@@ -12,12 +13,14 @@ export default class Trip {
   constructor(container) {
     this._container = container;
     this._currentSortType = SORT_TYPE.EVENT;
+    this._tripPresenterObserver = {};
 
     this._sortComponent = new Sort();
     this._tripDaysListComponent = new TripDaysList();
     this._noPointsComponent = new NoPoints();
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleTripDataChange = this._handleTripDataChange.bind(this);
   }
 
   _sortData(sortType) {
@@ -35,6 +38,12 @@ export default class Trip {
     this._currentSortType = sortType;
   };
 
+  _handleTripDataChange(updatedDataItem) {
+    this._data = updateItem(this._data, updatedDataItem);
+    this._sourcedData = updateItem(this._sourcedData, updatedDataItem);
+    this._tripPresenterObserver[updatedDataItem.id].init(updatedDataItem);
+  }
+
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
@@ -51,7 +60,10 @@ export default class Trip {
   }
 
   _clearTripList() {
-    this._tripDaysListComponent.getElement().innerHTML = ``;
+    Object
+      .values(this._tripPresenterObserver)
+      .forEach((tripPresenter) => tripPresenter.destroy());
+    this._tripPresenterObserver = {};
   }
 
   _renderSort() {
@@ -60,8 +72,9 @@ export default class Trip {
   }
 
   _renderTripEventItem(eventsContainer, data) {
-    const tripPresenter = new TripPresenter(eventsContainer);
+    const tripPresenter = new TripPresenter(eventsContainer, this._handleTripDataChange);
     tripPresenter.init(data);
+    this._tripPresenterObserver[data.id] = tripPresenter;
   }
 
   _renderTripDaysList() {

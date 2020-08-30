@@ -1,11 +1,12 @@
 import {RENDER_POSITION} from '../const';
-import {render, replace} from '../utils/render';
+import {render, replace, remove} from '../utils/render';
 import TripEventItem from '../components/trip-event-item-component';
 import TripEventEditItem from '../components/event-edit-component';
 
 export default class Trip {
-  constructor(container) {
+  constructor(container, changeData) {
     this._container = container;
+    this._changeData = changeData;
 
     this._tripEventComponent = null;
     this._tripEventEditComponent = null;
@@ -13,6 +14,7 @@ export default class Trip {
     this._handleEditClick  = this._handleEditClick.bind(this);
     this._handleFormSubmit  = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleFavoriteChange = this._handleFavoriteChange.bind(this);
   }
 
   _escKeyDownHandler(evt) {
@@ -29,9 +31,22 @@ export default class Trip {
     document.addEventListener(`keydown`, this._escKeyDownHandler);
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(data) {
+    this._changeData(data);
     this._replaceEditToEvent();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+  }
+
+  _handleFavoriteChange() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._data,
+        {
+          isFavorite: !this._data.isFavorite
+        }
+      )
+    );
   }
 
   _replaceEditToEvent() {
@@ -45,12 +60,35 @@ export default class Trip {
   init(data) {
     this._data = data;
 
+    const prevEventComponent = this._tripEventComponent;
+    const prevEventEditComponent = this._tripEventEditComponent;
+
     this._tripEventComponent = new TripEventItem(data);
     this._tripEventEditComponent = new TripEventEditItem(data);
 
     this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._tripEventEditComponent.setFavoriteChangeHandler(this._handleFavoriteChange);
 
-    render(this._container, this._tripEventComponent, RENDER_POSITION.BEFOREEND);
+    if (prevEventComponent === null || prevEventEditComponent === null) {
+      render(this._container, this._tripEventComponent, RENDER_POSITION.BEFOREEND);
+      return;
+    }
+
+    if (this._container.getElement().contains(prevEventComponent.getElement())) {
+      replace(this._tripEventComponent, prevEventComponent);
+    }
+
+    if (this._container.getElement().contains(prevEventEditComponent.getElement())) {
+      replace(this._tripEventEditComponent, prevEventEditComponent);
+    }
+
+    remove(prevEventComponent);
+    remove(prevEventEditComponent);
+  }
+
+  destroy() {
+    remove(this._tripEventComponent);
+    remove(this._tripEventEditComponent);
   }
 }

@@ -46,6 +46,20 @@ const checkEventType = (type, arr) => {
   return isActivityType ? `in` : `to`;
 };
 
+const updateItem = (array, updItem) => {
+  const index = array.findIndex((item) => item.id === updItem.id);
+
+  if (index === -1) {
+    return array;
+  }
+
+  return [
+    ...array.slice(0, index),
+    updItem,
+    ...array.slice(index + 1)
+  ];
+};
+
 export {
   getRandomItemFromArray,
   getRandomItemsFromArray,
@@ -57,4 +71,5 @@ export {
   formatTime,
   timeDuration,
   checkEventType,
+  updateItem,
 };

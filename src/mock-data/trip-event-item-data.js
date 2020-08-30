@@ -6,6 +6,8 @@ import {generateTripEventDestinationData} from "./trip-event-destination-data";
 
 const allEventsType = [...TRANSFER_TYPE, ...ACTIVITY_TYPE];
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateTripEventItemData = () => {
   const type = getRandomItemFromArray(allEventsType);
   const destinationName = getRandomItemFromArray(EVENT_DESTINATION);
@@ -13,14 +15,17 @@ const generateTripEventItemData = () => {
   const destinationInfo = generateTripEventDestinationData();
   const price = getRandomNumberFromInterval(RANDOM_PRICE_SETTINGS.MIN_PRICE, RANDOM_PRICE_SETTINGS.MAX_PRICE, RANDOM_PRICE_SETTINGS.MULTIPLE);
   const date = generateTripEventDateData();
+  const isFavorite = Math.random() > 0.5 ? true : false;
 
   return {
+    id: generateId(),
     type,
     destinationName,
     offers,
     destinationInfo,
     price,
     date,
+    isFavorite,
   };
 };
 

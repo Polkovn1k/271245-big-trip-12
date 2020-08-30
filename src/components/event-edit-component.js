@@ -49,7 +49,8 @@ const generateOptions = (optValue) => {
 };
 
 const createEventEditTemplate = (obj) => {
-  const {type, destinationName, offers, destinationInfo, price, date} = obj;
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = obj;
+  const favoriteStatus = isFavorite ? `checked` : ``;
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -107,7 +108,7 @@ const createEventEditTemplate = (obj) => {
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Cancel</button>
 
-        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${getCheckedStatus()}>
+        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favoriteStatus}>
         <label class="event__favorite-btn" for="event-favorite-1">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -146,6 +147,7 @@ export default class TripEventEditItem extends AbstractView {
     this._tripEventEditItemData = data;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -154,12 +156,24 @@ export default class TripEventEditItem extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._tripEventEditItemData);
+  }
+
+  _favoriteChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteChange();
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement()
       .addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  setFavoriteChangeHandler(callback) {
+    this._callback.favoriteChange = callback;
+    this.getElement()
+      .querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`change`, this._favoriteChangeHandler);
   }
 }
