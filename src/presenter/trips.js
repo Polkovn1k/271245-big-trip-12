@@ -21,6 +21,7 @@ export default class Trip {
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleTripDataChange = this._handleTripDataChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   _sortData(sortType) {
@@ -59,6 +60,12 @@ export default class Trip {
     }
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._tripPresenterObserver)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _clearTripList() {
     Object
       .values(this._tripPresenterObserver)
@@ -72,7 +79,7 @@ export default class Trip {
   }
 
   _renderTripEventItem(eventsContainer, data) {
-    const tripPresenter = new TripPresenter(eventsContainer, this._handleTripDataChange);
+    const tripPresenter = new TripPresenter(eventsContainer, this._handleTripDataChange, this._handleModeChange);
     tripPresenter.init(data);
     this._tripPresenterObserver[data.id] = tripPresenter;
   }

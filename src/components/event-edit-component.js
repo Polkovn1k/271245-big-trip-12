@@ -2,7 +2,7 @@ import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
 import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
 import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
 import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -141,7 +141,7 @@ const createEventEditTemplate = (objData) => {
   );
 };
 
-export default class TripEventEditItem extends AbstractView {
+export default class TripEventEditItem extends SmartView  {
   constructor(data) {
     super();
     this._data = data;
@@ -157,37 +157,6 @@ export default class TripEventEditItem extends AbstractView {
 
   getTemplate() {
     return createEventEditTemplate(this._data);
-  }
-
-  updateData(update, justDataUpdating) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-      {},
-      this._data,
-      update
-    );
-
-    if (justDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    prevElement = null;
-
-    this.restoreHandlers();
   }
 
   restoreHandlers() {
