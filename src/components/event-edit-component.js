@@ -1,8 +1,8 @@
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
 import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
+import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
+import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 import AbstractView from "./abstract.js";
-
-const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -10,11 +10,11 @@ const generatePhoto = (imgSrcArr, destinationName) => {
     .join(`\n`);
 };
 
-const generateEventTypeItems = (eventTypes) => {
+const generateEventTypeItems = (eventTypes, type) => {
   return eventTypes
     .map((item) => (
       `<div class="event__type-item">
-        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}">
+        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? `checked` : ``}>
         <label class="event__type-label  event__type-label--${item}" for="event-type-${item}-1">${item}</label>
       </div>`))
     .join(`\n`);
@@ -24,7 +24,7 @@ const getEventOfferSelecterTemplate = (offerData) => {
   return offerData
     .map((item, i) => (
       `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${i}" type="checkbox" name="event-offer-luggage" ${item.checked ? `checked` : ``}>
+        <input class="event__offer-checkbox  visually-hidden" data-id="${i}" id="event-offer-luggage-${i}" type="checkbox" name="event-offer-luggage" ${item.checked ? `checked` : ``}>
         <label class="event__offer-label" for="event-offer-luggage-${i}">
           <span class="event__offer-title">${item.title}</span>
             &plus;
@@ -48,8 +48,8 @@ const generateOptions = (optValue) => {
     .join(`\n`);
 };
 
-const createEventEditTemplate = (obj) => {
-  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = obj;
+const createEventEditTemplate = (objData) => {
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = objData;
   const favoriteStatus = isFavorite ? `checked` : ``;
 
   return (
@@ -65,12 +65,12 @@ const createEventEditTemplate = (obj) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
-              ${generateEventTypeItems(TRANSFER_TYPE)}
+              ${generateEventTypeItems(TRANSFER_TYPE, type)}
             </fieldset>
 
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Activity</legend>
-              ${generateEventTypeItems(ACTIVITY_TYPE)}
+              ${generateEventTypeItems(ACTIVITY_TYPE, type)}
             </fieldset>
           </div>
         </div>
@@ -144,19 +144,127 @@ const createEventEditTemplate = (obj) => {
 export default class TripEventEditItem extends AbstractView {
   constructor(data) {
     super();
-    this._tripEventEditItemData = data;
+    this._data = data;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
+    this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+    this._priceInputHandler = this._priceInputHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._tripEventEditItemData);
+    return createEventEditTemplate(this._data);
+  }
+
+  updateData(update, justDataUpdating) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      update
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
+
+    this.updateElement();
+  }
+
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+    prevElement = null;
+
+    this.restoreHandlers();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setFavoriteChangeHandler(this._callback.favoriteChange);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((item) => {
+        item.addEventListener(`change`, this._offersChangeHandler);
+      });
+
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((item) => {
+        item.addEventListener(`change`, this._eventTypeChangeHandler);
+      });
+
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._destinationChangeHandler);
+
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._priceInputHandler);
+  }
+
+  _eventTypeChangeHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.value === this._data.type) {
+      return;
+    }
+    this.updateData({
+      type: evt.target.value,
+      offers: generateTripEventOfferData()[evt.target.value],
+    });
+  }
+
+  _offersChangeHandler(evt) {
+    evt.preventDefault();
+    let offers = this._data.offers.map((item, i) => {
+      if (+evt.currentTarget.dataset.id === i) {
+        item.checked = evt.currentTarget.checked;
+      }
+      return item;
+    });
+    this.updateData({
+      offers,
+    });
+  }
+
+  _destinationChangeHandler(evt) {
+    evt.preventDefault();
+    const isRightValue = EVENT_DESTINATION.some((item) => evt.target.value === item);
+
+    this.updateData({
+      destinationName: isRightValue ? evt.target.value : this._data.destinationName,
+      destinationInfo: generateTripEventDestinationData(),
+    });
+  }
+
+  _priceInputHandler(evt) {
+    let value = Number.parseInt(evt.target.value);
+    if (isNaN(value)) {
+      return;
+    }
+    this.updateData({
+      price: value,
+    }, true);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._tripEventEditItemData);
+    this._callback.formSubmit(this._data);
   }
 
   _favoriteChangeHandler(evt) {
