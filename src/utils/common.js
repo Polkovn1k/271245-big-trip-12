@@ -67,4 +67,5 @@ export {
   timeDuration,
   checkEventType,
   updateItem,
+  formatDate,
 };

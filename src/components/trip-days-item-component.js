@@ -1,15 +1,14 @@
-import {MONTH_NAMES} from '../const';
+import {formatDate} from '../utils/common';
 import AbstractView from "./abstract.js";
 
-const createTripDaysItemTemplate = (tripDay = ``, count = ``) => {
-  const month = tripDay ? MONTH_NAMES[new Date(tripDay).getMonth()] : ``;
-  const dateNum = tripDay ? new Date(tripDay).getDate() : ``;
+const createTripDaysItemTemplate = (tripDay, count) => {
+  const date = tripDay ? formatDate(new Date(tripDay)) : ``;
 
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${count}</span>
-        <time class="day__date" datetime="${tripDay}">${month} ${dateNum}</time>
+        <time class="day__date" datetime="${tripDay}">${date}</time>
       </div>
     </li>`
   );
@@ -18,8 +17,8 @@ const createTripDaysItemTemplate = (tripDay = ``, count = ``) => {
 export default class TripDaysItem extends AbstractView {
   constructor(data, count) {
     super();
-    this._tripDaysItemData = data;
-    this._count = count;
+    this._tripDaysItemData = data || ``;
+    this._count = count || ``;
   }
 
   getTemplate() {
