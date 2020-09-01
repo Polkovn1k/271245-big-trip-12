@@ -71,6 +71,7 @@ export default class Trip {
       .values(this._tripPresenterObserver)
       .forEach((tripPresenter) => tripPresenter.destroy());
     this._tripPresenterObserver = {};
+    this._tripDaysListComponent.getElement().innerHTML = ``;
   }
 
   _renderSort() {
