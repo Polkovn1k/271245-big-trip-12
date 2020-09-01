@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getRandomItemsFromArray = (arr, quantity) => {
@@ -16,29 +18,22 @@ const getRandomNumberFromInterval = (min, max, mult) => Math.floor(Math.floor(Ma
 
 const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
 
-const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours() % 12);
-  const minutes = castTimeFormat(date.getMinutes());
+const formatTime = (date) => moment(date).format(`hh:mm`);
 
-  return `${hours}:${minutes}`;
-};
+const formatDate = (date) => moment(date).format(`DD MMMM`);
 
+const timeDuration = (start, end) => {
+  const momentDiff = moment(end).diff(moment(start));
+  const momentDuration = moment.duration(momentDiff);
 
-function timeDuration(start, end) {
-  const startTime = start.getTime();
-  const endTime = end.getTime();
-  const diff = endTime - startTime;
-  const days = new Date(endTime).getDay() - new Date(startTime).getDay();
-  const hours = new Date(endTime).getHours() - new Date(startTime).getHours();
-  const minutes = new Date(diff - (hours * (24 * 3600 * 1000))).getMinutes();
   const duration = {
-    days: days > 0 ? `${castTimeFormat(days)}D ` : ``,
-    hours: hours > 0 ? `${castTimeFormat(hours)}H ` : ``,
-    minutes: minutes > 0 ? `${castTimeFormat(minutes)}M` : ``,
+    days: momentDuration.get(`days`) > 0 ? `${castTimeFormat(momentDuration.get(`days`))}D` : ``,
+    hours: momentDuration.get(`hours`) > 0 ? `${castTimeFormat(momentDuration.get(`hours`))}H` : ``,
+    minutes: momentDuration.get(`minutes`) > 0 ? `${castTimeFormat(momentDuration.get(`minutes`))}M` : ``,
   };
 
-  return `${duration.days}${duration.hours}${duration.minutes}`;
-}
+  return `${duration.days} ${duration.hours} ${duration.minutes}`;
+};
 
 const checkEventType = (type, arr) => {
   const isActivityType = arr.some((item) => item === type);

@@ -3,6 +3,9 @@ import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
 import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
 import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 import SmartView from "./smart.js";
+import flatpickr from "flatpickr";
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import "../../node_modules/flatpickr/dist/themes/material_blue.css";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -145,6 +148,8 @@ export default class TripEventEditItem extends SmartView  {
   constructor(data) {
     super();
     this._data = data;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
@@ -152,7 +157,11 @@ export default class TripEventEditItem extends SmartView  {
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+
     this._setInnerHandlers();
+    this._setDatepicker();
   }
 
   getTemplate() {
@@ -161,8 +170,40 @@ export default class TripEventEditItem extends SmartView  {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFavoriteChangeHandler(this._callback.favoriteChange);
+  }
+
+  _setDatepicker() {
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
+
+    const startDateElement = this.getElement().querySelector(`.event__input--time[name="event-start-time"]`);
+    this._flatpickrStart = flatpickr(startDateElement, {
+      enableTime: true,
+      altInput: true,
+      allowInput: true,
+      dateFormat: `Y/m/d H:i`,
+      altFormat: `Y/m/d H:i`,
+      defaultDate: this._data.date.startDate,
+      onChange: this._startDateChangeHandler,
+    });
+
+    const endDateElement = this.getElement().querySelector(`.event__input--time[name="event-end-time"]`);
+    this._flatpickrStart = flatpickr(endDateElement, {
+      enableTime: true,
+      altInput: true,
+      allowInput: true,
+      dateFormat: `Y/m/d H:i`,
+      altFormat: `Y/m/d H:i`,
+      defaultDate: this._data.date.endDate,
+      onChange: this._endDateChangeHandler,
+    });
   }
 
   _setInnerHandlers() {
@@ -208,6 +249,36 @@ export default class TripEventEditItem extends SmartView  {
     });
     this.updateData({
       offers,
+    });
+  }
+
+  _startDateChangeHandler(startDate) {
+    let date = Object.assign(
+      {},
+      {
+        startDate: new Date(startDate),
+        endDate: this._data.date.endDate > new Date(startDate)
+          ? this._data.date.endDate
+          : new Date(new Date(startDate).getTime() + 3600000),
+      }
+    );
+    this.updateData({
+      date,
+    });
+  }
+
+  _endDateChangeHandler(endDate) {
+    let date = Object.assign(
+      {},
+      {
+        endDate: new Date(endDate),
+        startDate: this._data.date.startDate < new Date(endDate)
+          ? this._data.date.startDate
+          : new Date(new Date(endDate).getTime() - 3600000),
+      }
+    );
+    this.updateData({
+      date,
     });
   }
 
