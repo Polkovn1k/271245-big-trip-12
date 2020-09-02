@@ -1,7 +1,10 @@
 import {RENDER_POSITION} from '../const';
-import {render, replace, remove} from '../utils/render';
+
 import TripEventItem from '../components/trip-event-item-component';
 import TripEventEditItem from '../components/event-edit-component';
+
+import {render, replace, remove} from '../utils/render';
+
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -20,61 +23,18 @@ export default class Trip {
 
     this._handleEditClick  = this._handleEditClick.bind(this);
     this._handleFormSubmit  = this._handleFormSubmit.bind(this);
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleFavoriteChange = this._handleFavoriteChange.bind(this);
   }
 
-  _escKeyDownHandler(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      this._replaceEditToEvent();
-      document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    }
-  };
-
-  _handleEditClick() {
-    this._replaceEventToEdit();
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
-  }
-
-  _handleFormSubmit(data) {
-    this._changeData(data);
-    this._replaceEditToEvent();
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
-  }
-
-  _handleFavoriteChange() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._data,
-        {
-          isFavorite: !this._data.isFavorite
-        }
-      )
-    );
-  }
-
-  _replaceEditToEvent() {
-    replace(this._tripEventComponent, this._tripEventEditComponent);
-    this._mode = Mode.DEFAULT;
-  };
-
-  _replaceEventToEdit() {
-    replace(this._tripEventEditComponent, this._tripEventComponent);
-    this._changeMode();
-    this._mode = Mode.EDITING;
-  };
-
-  init(data) {
-    this._data = data;
+  init(tripData) {
+    this._data = tripData;
 
     const prevEventComponent = this._tripEventComponent;
     const prevEventEditComponent = this._tripEventEditComponent;
 
-    this._tripEventComponent = new TripEventItem(data);
-    this._tripEventEditComponent = new TripEventEditItem(data);
+    this._tripEventComponent = new TripEventItem(tripData);
+    this._tripEventEditComponent = new TripEventEditItem(tripData);
 
     this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
@@ -96,6 +56,48 @@ export default class Trip {
     remove(prevEventComponent);
     remove(prevEventEditComponent);
   }
+
+  _handleEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      this._replaceEditToEvent();
+    }
+  };
+
+  _handleEditClick() {
+    this._replaceEventToEdit();
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _handleFormSubmit(data) {
+    this._changeData(data);
+    this._replaceEditToEvent();
+  }
+
+  _handleFavoriteChange() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._data,
+        {
+          isFavorite: !this._data.isFavorite
+        }
+      )
+    );
+  }
+
+  _replaceEditToEvent() {
+    replace(this._tripEventComponent, this._tripEventEditComponent);
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
+    this._mode = Mode.DEFAULT;
+  };
+
+  _replaceEventToEdit() {
+    replace(this._tripEventEditComponent, this._tripEventComponent);
+    this._changeMode();
+    this._mode = Mode.EDITING;
+  };
 
   destroy() {
     remove(this._tripEventComponent);

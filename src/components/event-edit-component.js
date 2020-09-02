@@ -1,11 +1,13 @@
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
-import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
+
+import SmartView from "./smart.js";
+
+import {datePicker} from "./date-picker";
+
+import {checkEventType} from '../utils/common';
+import {formatTime, castTimeFormat} from '../utils/date-time';
 import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
 import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
-import SmartView from "./smart.js";
-import flatpickr from "flatpickr";
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import "../../node_modules/flatpickr/dist/themes/material_blue.css";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -160,8 +162,10 @@ export default class TripEventEditItem extends SmartView  {
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
+    this._datePicker = datePicker.bind(this);
+
     this._setInnerHandlers();
-    this._setDatepicker();
+    this._datePicker();
   }
 
   getTemplate() {
@@ -170,40 +174,9 @@ export default class TripEventEditItem extends SmartView  {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this._setDatepicker();
+    this._datePicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFavoriteChangeHandler(this._callback.favoriteChange);
-  }
-
-  _setDatepicker() {
-    if (this._flatpickrStart && this._flatpickrEnd) {
-      this._flatpickrStart.destroy();
-      this._flatpickrStart = null;
-      this._flatpickrEnd.destroy();
-      this._flatpickrEnd = null;
-    }
-
-    const startDateElement = this.getElement().querySelector(`.event__input--time[name="event-start-time"]`);
-    this._flatpickrStart = flatpickr(startDateElement, {
-      enableTime: true,
-      altInput: true,
-      allowInput: true,
-      dateFormat: `Y/m/d H:i`,
-      altFormat: `Y/m/d H:i`,
-      defaultDate: this._data.date.startDate,
-      onChange: this._startDateChangeHandler,
-    });
-
-    const endDateElement = this.getElement().querySelector(`.event__input--time[name="event-end-time"]`);
-    this._flatpickrStart = flatpickr(endDateElement, {
-      enableTime: true,
-      altInput: true,
-      allowInput: true,
-      dateFormat: `Y/m/d H:i`,
-      altFormat: `Y/m/d H:i`,
-      defaultDate: this._data.date.endDate,
-      onChange: this._endDateChangeHandler,
-    });
   }
 
   _setInnerHandlers() {

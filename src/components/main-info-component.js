@@ -1,4 +1,5 @@
 import {MONTH_NAMES} from '../const';
+
 import AbstractView from "./abstract.js";
 
 const generateTitle = (array) => {

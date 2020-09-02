@@ -1,4 +1,5 @@
 import {RENDER_POSITION} from '../const';
+
 import Abstract from "../components/abstract";
 
 const createElement = (template) => {

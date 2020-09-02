@@ -1,17 +1,18 @@
 import {RENDER_POSITION} from './const';
-import {render} from './utils/render';
+
 import InfoContainer from './components/info-container-component';
 import MainInfo from './components/main-info-component';
 import Cost from './components/cost-component';
 import Menu from './components/menu-component';
 import Filter from './components/filter-component';
-import TripsPresenter from './presenter/trips';
+import TripsPresenter from './presenter/trip-list';
+
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
+import {render} from './utils/render';
 
 const TRIP_EVENT_ITEM_QUANTITY = 20;
 const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
-const tripEventsTitle = tripEvents.querySelector(`.trip-events h2:first-child`);
 
 const renderInfo = (infoData) => {
   const infoContainer = new InfoContainer();

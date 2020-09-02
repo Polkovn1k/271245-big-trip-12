@@ -1,4 +1,5 @@
 import {SORT_TYPE} from '../const';
+
 import AbstractView from "./abstract.js";
 
 const createSortTemplate = () => {
@@ -66,5 +67,3 @@ export default class Sort extends AbstractView {
     this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
-
-export {SORT_TYPE};

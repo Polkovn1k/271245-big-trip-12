@@ -1,13 +1,15 @@
 import {RENDER_POSITION, SORT_TYPE} from '../const';
-import {render, replace} from '../utils/render';
-import {updateItem} from "../utils/common.js";
+
 import Sort from '../components/sort-component';
 import TripPresenter from './trip';
 import TripDaysList from '../components/trip-days-list-component';
 import TripDaysItem from '../components/trip-days-item-component';
 import TripEventList from '../components/trip-events-list-component';
 import NoPoints from '../components/no-points-component';
+
 import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
+import {render} from '../utils/render';
+import {updateItem} from "../utils/common.js";
 
 export default class Trip {
   constructor(container) {
@@ -22,6 +24,13 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleTripDataChange = this._handleTripDataChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+  }
+
+  init(tripListData) {
+    this._data = tripListData.slice();
+    this._sourcedData = tripListData.slice();
+
+    this._renderMainRender();
   }
 
   _sortData(sortType) {
@@ -79,10 +88,10 @@ export default class Trip {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _renderTripEventItem(eventsContainer, data) {
+  _renderTripEventItem(eventsContainer, currentDayEvent) {
     const tripPresenter = new TripPresenter(eventsContainer, this._handleTripDataChange, this._handleModeChange);
-    tripPresenter.init(data);
-    this._tripPresenterObserver[data.id] = tripPresenter;
+    tripPresenter.init(currentDayEvent);
+    this._tripPresenterObserver[currentDayEvent.id] = tripPresenter;
   }
 
   _renderTripDaysList() {
@@ -128,12 +137,5 @@ export default class Trip {
     this._renderSort();
     render(this._container, this._tripDaysListComponent, RENDER_POSITION.BEFOREEND);
     this._renderTripDaysList();
-  }
-
-  init(data) {
-    this._data = data.slice();
-    this._sourcedData = data.slice();
-
-    this._renderMainRender();
   }
 }

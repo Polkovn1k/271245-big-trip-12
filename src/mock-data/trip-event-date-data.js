@@ -31,4 +31,8 @@ const generateTripDays = (eventArr) => {
   return [...new Set(tripDays)];
 };
 
-export {generateTripEventDateData, generateTripDays, getTripDaysString};
+export {
+  generateTripEventDateData,
+  generateTripDays,
+  getTripDaysString
+};
