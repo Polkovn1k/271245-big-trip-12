@@ -10,6 +10,9 @@ import NoPoints from '../components/no-points-component';
 import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
 import {render} from '../utils/render';
 import {updateItem} from "../utils/common.js";
+import InfoContainer from "../components/info-container-component";
+import Cost from "../components/cost-component";
+import MainInfo from "../components/main-info-component";
 
 export default class Trip {
   constructor(container) {
@@ -31,6 +34,7 @@ export default class Trip {
     this._sourcedData = tripListData.slice();
 
     this._renderMainRender();
+    this._renderInfo();
   }
 
   _sortData(sortType) {
@@ -137,5 +141,15 @@ export default class Trip {
     this._renderSort();
     render(this._container, this._tripDaysListComponent, RENDER_POSITION.BEFOREEND);
     this._renderTripDaysList();
+  }
+
+  _renderInfo() {
+    const tripMain = document.querySelector(`.trip-main`);
+    const infoContainer = new InfoContainer();
+    render(tripMain, infoContainer, RENDER_POSITION.AFTERBEGIN);
+    render(infoContainer, new Cost(), RENDER_POSITION.BEFOREEND);
+    if (this._data.length) {
+      render(tripMain, new MainInfo(this._data), RENDER_POSITION.AFTERBEGIN);
+    }
   }
 }
