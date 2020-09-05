@@ -76,6 +76,18 @@ const SORT_TYPE = {
   PRICE: `sort-price`,
 };
 
+const USERACTION = {
+  UPDATE_TRIP: `UPDATE`,
+  ADD_TRIP: `ADD`,
+  DELETE_TRIP: `DELETE`,
+};
+
+const UPDATETYPE = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`,
+};
+
 export {
   TRANSFER_TYPE,
   ACTIVITY_TYPE,
@@ -83,5 +95,7 @@ export {
   MONTH_NAMES,
   RANDOM_PRICE_SETTINGS,
   RENDER_POSITION,
-  SORT_TYPE
+  SORT_TYPE,
+  USERACTION,
+  UPDATETYPE
 };

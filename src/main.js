@@ -30,5 +30,5 @@ tripModel.setTrips(tripEventItems);
 const mainTripPresenter = new TripsPresenter(tripEvents, tripModel);
 
 renderTripMainControls();
-mainTripPresenter.init(tripEventItems);
+mainTripPresenter.init();
 console.dir(tripEventItems);

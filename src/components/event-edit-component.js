@@ -111,7 +111,7 @@ const createEventEditTemplate = (objData) => {
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Cancel</button>
+        <button class="event__reset-btn" type="reset">Delete</button>
 
         <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favoriteStatus}>
         <label class="event__favorite-btn" for="event-favorite-1">
@@ -161,11 +161,23 @@ export default class TripEventEditItem extends SmartView  {
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
     this._datePicker = datePicker.bind(this);
 
     this._setInnerHandlers();
     this._datePicker();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
   }
 
   getTemplate() {
@@ -177,6 +189,7 @@ export default class TripEventEditItem extends SmartView  {
     this._datePicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFavoriteChangeHandler(this._callback.favoriteChange);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setInnerHandlers() {
@@ -285,6 +298,11 @@ export default class TripEventEditItem extends SmartView  {
     this._callback.favoriteChange();
   }
 
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._data);
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement()
@@ -296,5 +314,11 @@ export default class TripEventEditItem extends SmartView  {
     this.getElement()
       .querySelector(`.event__favorite-checkbox`)
       .addEventListener(`change`, this._favoriteChangeHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, this._formDeleteClickHandler);
   }
 }
