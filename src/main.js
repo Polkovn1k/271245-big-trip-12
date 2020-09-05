@@ -4,6 +4,8 @@ import Menu from './components/menu-component';
 import Filter from './components/filter-component';
 import TripsPresenter from './presenter/trip-list';
 
+import TripModel from "./model/points.js";
+
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 import {render} from './utils/render';
 
@@ -22,7 +24,10 @@ const renderTripMainControls = () => {
 const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
   .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 
-const mainTripPresenter = new TripsPresenter(tripEvents);
+const tripModel = new TripModel();
+tripModel.setTrips(tripEventItems);
+
+const mainTripPresenter = new TripsPresenter(tripEvents, tripModel);
 
 renderTripMainControls();
 mainTripPresenter.init(tripEventItems);

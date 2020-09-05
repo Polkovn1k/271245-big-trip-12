@@ -33,4 +33,4 @@ const datePicker = function() {
   });
 };
 
-export {datePicker}
+export {datePicker};

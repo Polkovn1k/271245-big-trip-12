@@ -15,7 +15,8 @@ import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
 
 export default class Trip {
-  constructor(container) {
+  constructor(container, tripModel) {
+    this._tripModel = tripModel;
     this._container = container;
     this._currentSortType = SORT_TYPE.EVENT;
     this._tripPresenterObserver = {};
@@ -71,6 +72,10 @@ export default class Trip {
     } else {
       this._renderTripList();
     }
+  }
+
+  _getTrips() {
+    return this._tripModel.getTrips();
   }
 
   _handleModeChange() {
