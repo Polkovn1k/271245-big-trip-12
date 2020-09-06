@@ -9,13 +9,15 @@ import NoPoints from '../components/no-points-component';
 
 import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
 import {render, remove} from '../utils/render';
+import {filter} from "../utils/filter.js";
 import InfoContainer from "../components/info-container-component";
 import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
 
 export default class Trip {
-  constructor(container, tripModel) {
+  constructor(container, tripModel, filterModel) {
     this._tripModel = tripModel;
+    this._filterModel = filterModel;
     this._container = container;
     this._currentSortType = SORT_TYPE.EVENT;
     this._tripPresenterObserver = {};
@@ -30,6 +32,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
 
     this._tripModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -81,13 +84,17 @@ export default class Trip {
   }
 
   _getTripsData() {
+    const filterType = this._filterModel.getFilter();
+    const tripData = this._tripModel.getTrips();
+    const filtredTripData = filter[filterType](tripData);
+
     switch (this._currentSortType) {
       case SORT_TYPE.TIME:
-        return this._tripModel.getTrips().slice().sort((a, b) => (new Date(b.date.endDate) - new Date(b.date.startDate)) - (new Date(a.date.endDate) - new Date(a.date.startDate)));
+        return filtredTripData.sort((a, b) => (new Date(b.date.endDate) - new Date(b.date.startDate)) - (new Date(a.date.endDate) - new Date(a.date.startDate)));
       case SORT_TYPE.PRICE:
-        return this._tripModel.getTrips().slice().sort((a, b) => b.price - a.price);
+        return filtredTripData.sort((a, b) => b.price - a.price);
     }
-    return this._tripModel.getTrips();
+    return filtredTripData;
   }
 
   _handleModeChange() {

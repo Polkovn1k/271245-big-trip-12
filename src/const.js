@@ -88,6 +88,12 @@ const UPDATETYPE = {
   MAJOR: `MAJOR`,
 };
 
+const FILTERTYPE = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
+
 export {
   TRANSFER_TYPE,
   ACTIVITY_TYPE,
@@ -97,5 +103,6 @@ export {
   RENDER_POSITION,
   SORT_TYPE,
   USERACTION,
-  UPDATETYPE
+  UPDATETYPE,
+  FILTERTYPE,
 };

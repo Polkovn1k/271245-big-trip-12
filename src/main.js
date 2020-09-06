@@ -2,9 +2,12 @@ import {RENDER_POSITION} from './const';
 
 import Menu from './components/menu-component';
 import Filter from './components/filter-component';
-import TripsPresenter from './presenter/trip-list';
 
-import TripModel from "./model/points.js";
+import TripsPresenter from './presenter/trip-list';
+import FilterPresenter from "./presenter/filter";
+
+import TripModel from "./model/points";
+import FilterModel from "./model/filter";
 
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 import {render} from './utils/render';
@@ -12,23 +15,22 @@ import {render} from './utils/render';
 const TRIP_EVENT_ITEM_QUANTITY = 20;
 const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
-
-const renderTripMainControls = () => {
-  const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
-  const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
-
-  render(tripMainControls, new Filter(), RENDER_POSITION.BEFOREEND);
-  render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
-};
+const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
+const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
 
 const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
   .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 
 const tripModel = new TripModel();
+const filterModel = new FilterModel();
+
 tripModel.setTrips(tripEventItems);
 
-const mainTripPresenter = new TripsPresenter(tripEvents, tripModel);
+const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
+const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
-renderTripMainControls();
+render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
+
+filterPresenter.init();
 mainTripPresenter.init();
 console.dir(tripEventItems);
