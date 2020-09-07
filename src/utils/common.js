@@ -34,6 +34,8 @@ const updateItem = (array, updItem) => {
   ];
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export {
   getRandomItemFromArray,
   getRandomItemsFromArray,
@@ -43,4 +45,5 @@ export {
   getRandomNumberFromInterval,
   checkEventType,
   updateItem,
+  generateId,
 };

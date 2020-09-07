@@ -5,7 +5,6 @@ import TripEventEditItem from '../components/event-edit-component';
 
 import {render, replace, remove} from '../utils/render';
 
-
 const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`

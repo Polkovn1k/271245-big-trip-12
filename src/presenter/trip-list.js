@@ -1,7 +1,8 @@
-import {RENDER_POSITION, SORT_TYPE, UPDATETYPE, USERACTION} from '../const';
+import {RENDER_POSITION, SORT_TYPE, UPDATETYPE, USERACTION, FILTERTYPE} from '../const';
 
 import Sort from '../components/sort-component';
 import TripPresenter from './trip';
+import NewTripPresenter from "./new-trip";
 import TripDaysList from '../components/trip-days-list-component';
 import TripDaysItem from '../components/trip-days-item-component';
 import TripEventList from '../components/trip-events-list-component';
@@ -33,6 +34,8 @@ export default class Trip {
 
     this._tripModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction);
   }
 
   init() {
@@ -40,8 +43,13 @@ export default class Trip {
     this._renderInfo();
   }
 
+  createTrip() {
+    this._currentSortType = SORT_TYPE.EVENT;
+    this._filterModel.setFilter(UPDATETYPE.MAJOR, FILTERTYPE.EVERYTHING);
+    this._newTripPresenter.init();
+  }
+
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case USERACTION.UPDATE_TRIP:
         this._tripModel.updateTrip(updateType, update);
@@ -56,7 +64,6 @@ export default class Trip {
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
     switch (updateType) {
       case UPDATETYPE.PATCH:
         this._tripPresenterObserver[data.id].init(data);
@@ -98,6 +105,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._newTripPresenter.destroy();
     Object
       .values(this._tripPresenterObserver)
       .forEach((presenter) => presenter.resetView());
@@ -162,6 +170,7 @@ export default class Trip {
   }
 
   _clearMainTripList({resetSortType = false} = {}) {
+    this._newTripPresenter.destroy();
     Object
       .values(this._tripPresenterObserver)
       .forEach((tripPresenter) => tripPresenter.destroy());

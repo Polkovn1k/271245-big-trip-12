@@ -1,3 +1,5 @@
+import {generateId} from '../utils/common';
+
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION, RANDOM_PRICE_SETTINGS} from '../const';
 
 import {getRandomItemFromArray, getRandomNumberFromInterval} from '../utils/common';
@@ -6,8 +8,6 @@ import {generateTripEventDateData} from "./trip-event-date-data";
 import {generateTripEventDestinationData} from "./trip-event-destination-data";
 
 const allEventsType = [...TRANSFER_TYPE, ...ACTIVITY_TYPE];
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateTripEventItemData = () => {
   const type = getRandomItemFromArray(allEventsType);
