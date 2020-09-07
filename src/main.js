@@ -34,9 +34,10 @@ render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
 filterPresenter.init();
 mainTripPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  mainTripPresenter.createTrip();
-});
+document.querySelector(`.trip-main__event-add-btn`)
+  .addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    mainTripPresenter.createTrip();
+  });
 
 console.dir(tripEventItems);
