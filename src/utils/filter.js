@@ -1,9 +1,9 @@
-import {FILTERTYPE} from "../const";
+import {filterChangeType} from "../const";
 
 const filter = {
-  [FILTERTYPE.EVERYTHING]: (eventDataList) => eventDataList.slice(),
-  [FILTERTYPE.FUTURE]: (eventDataList) => eventDataList.filter((dataItem) => dataItem.date.startDate > Date.now()),
-  [FILTERTYPE.PAST]: (eventDataList) => eventDataList.filter((dataItem) => dataItem.date.startDate < Date.now()),
+  [filterChangeType.EVERYTHING]: (eventDataList) => eventDataList.slice(),
+  [filterChangeType.FUTURE]: (eventDataList) => eventDataList.filter((dataItem) => dataItem.date.startDate > Date.now()),
+  [filterChangeType.PAST]: (eventDataList) => eventDataList.filter((dataItem) => dataItem.date.startDate < Date.now()),
 };
 
 export {

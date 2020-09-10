@@ -2,8 +2,7 @@ import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
 
 import SmartView from "./smart.js";
 
-import {datePicker} from "./date-picker";
-
+import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
 import {checkEventType} from '../utils/common';
 import {formatTime, castTimeFormat} from '../utils/date-time';
 import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
@@ -225,10 +224,11 @@ export default class TripEventEditItem extends SmartView  {
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
-    this._datePicker = datePicker.bind(this);
+    this._getFlatpickrStart = getFlatpickrStart.bind(this);
+    this._getFlatpickrEnd = getFlatpickrEnd.bind(this);
 
     this._setInnerHandlers();
-    this._datePicker();
+    this._setDatePickers();
   }
 
   removeElement() {
@@ -248,10 +248,23 @@ export default class TripEventEditItem extends SmartView  {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this._datePicker();
+
+    this._setDatePickers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFavoriteChangeHandler(this._callback.favoriteChange);
     this.setDeleteClickHandler(this._callback.deleteClick);
+  }
+
+  _setDatePickers() {
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
+
+    this._flatpickrStart = this._getFlatpickrStart(this._data.date.startDate, this._startDateChangeHandler);
+    this._flatpickrEnd = this._getFlatpickrEnd(this._data.date.endDate, this._endDateChangeHandler);
   }
 
   _setInnerHandlers() {

@@ -1,7 +1,7 @@
 import FilterView from "../components/filter-component";
 import {render, replace, remove} from "../utils/render";
 import {filter} from "../utils/filter";
-import {FILTERTYPE, UPDATETYPE, RENDER_POSITION} from "../const";
+import {filterChangeType, dataUpdateType, renderPosition} from "../const";
 
 export default class Filter {
   constructor(filterContainer, filterModel, tripModel) {
@@ -29,7 +29,7 @@ export default class Filter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RENDER_POSITION.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, renderPosition.BEFOREEND);
       return;
     }
 
@@ -46,7 +46,7 @@ export default class Filter {
       return;
     }
 
-    this._filterModel.setFilter(UPDATETYPE.MAJOR, filterType);
+    this._filterModel.setFilter(dataUpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
@@ -54,19 +54,19 @@ export default class Filter {
 
     return [
       {
-        type: FILTERTYPE.EVERYTHING,
-        name: FILTERTYPE.EVERYTHING,
-        count: filter[FILTERTYPE.EVERYTHING](tripData).length
+        type: filterChangeType.EVERYTHING,
+        name: filterChangeType.EVERYTHING,
+        count: filter[filterChangeType.EVERYTHING](tripData).length
       },
       {
-        type: FILTERTYPE.FUTURE,
-        name: FILTERTYPE.FUTURE,
-        count: filter[FILTERTYPE.FUTURE](tripData).length
+        type: filterChangeType.FUTURE,
+        name: filterChangeType.FUTURE,
+        count: filter[filterChangeType.FUTURE](tripData).length
       },
       {
-        type: FILTERTYPE.PAST,
-        name: FILTERTYPE.PAST,
-        count: filter[FILTERTYPE.PAST](tripData).length
+        type: filterChangeType.PAST,
+        name: filterChangeType.PAST,
+        count: filter[filterChangeType.PAST](tripData).length
       },
     ];
   }

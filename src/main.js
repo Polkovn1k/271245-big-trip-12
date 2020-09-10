@@ -1,4 +1,4 @@
-import {RENDER_POSITION} from './const';
+import {renderPosition} from './const';
 
 import Menu from './components/menu-component';
 
@@ -28,7 +28,7 @@ tripModel.setTrips(tripEventItems);
 const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
-render(tripMainControlsTitle, new Menu(), RENDER_POSITION.AFTEREND);
+render(tripMainControlsTitle, new Menu(), renderPosition.AFTEREND);
 
 filterPresenter.init();
 mainTripPresenter.init();

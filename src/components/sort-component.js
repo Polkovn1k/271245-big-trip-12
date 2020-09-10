@@ -1,4 +1,4 @@
-import {SORT_TYPE} from '../const';
+import {itemSortType} from '../const';
 
 import AbstractView from "./abstract.js";
 
@@ -8,12 +8,12 @@ const createSortTemplate = (sortType) => {
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
       <div class="trip-sort__item  trip-sort__item--event">
-        <input id="${SORT_TYPE.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.EVENT}" ${sortType === SORT_TYPE.EVENT ? `checked` : ``}>
+        <input id="${itemSortType.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.EVENT}" ${sortType === itemSortType.EVENT ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-event">Event</label>
       </div>
 
       <div class="trip-sort__item  trip-sort__item--time">
-        <input id="${SORT_TYPE.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.TIME}" ${sortType === SORT_TYPE.TIME ? `checked` : ``}>
+        <input id="${itemSortType.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.TIME}" ${sortType === itemSortType.TIME ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-time">
           Time
           <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
@@ -23,7 +23,7 @@ const createSortTemplate = (sortType) => {
       </div>
 
       <div class="trip-sort__item  trip-sort__item--price">
-        <input id="${SORT_TYPE.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.PRICE}" ${sortType === SORT_TYPE.PRICE ? `checked` : ``}>
+        <input id="${itemSortType.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.PRICE}" ${sortType === itemSortType.PRICE ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-price">
           Price
           <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
