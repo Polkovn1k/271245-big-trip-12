@@ -87,7 +87,6 @@ export default class Trip {
     this._currentSortType = sortType;
     this._clearMainTripList();
     this._renderMainRender();
-    this._sortComponent.getElement().querySelector(`#${sortType}`).checked = true;
   }
 
   _getTripsData() {

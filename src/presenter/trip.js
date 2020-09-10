@@ -83,7 +83,7 @@ export default class Trip {
   _handleFavoriteChange() {
     this._changeData(
       USERACTION.UPDATE_TRIP,
-      UPDATETYPE.MINOR,
+      UPDATETYPE.PATCH,
       Object.assign(
         {},
         this._data,

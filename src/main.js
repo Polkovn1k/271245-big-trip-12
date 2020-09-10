@@ -1,7 +1,6 @@
 import {RENDER_POSITION} from './const';
 
 import Menu from './components/menu-component';
-import Filter from './components/filter-component';
 
 import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
@@ -37,6 +36,7 @@ mainTripPresenter.init();
 document.querySelector(`.trip-main__event-add-btn`)
   .addEventListener(`click`, (evt) => {
     evt.preventDefault();
+    evt.currentTarget.disabled = true;
     mainTripPresenter.createTrip();
   });
 
