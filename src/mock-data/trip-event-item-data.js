@@ -27,6 +27,7 @@ const generateTripEventItemData = () => {
     price,
     date,
     isFavorite,
+    addMode: false,
   };
 };
 

@@ -9,15 +9,7 @@ import {formatTime, castTimeFormat} from '../utils/date-time';
 import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
 import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 
-const defaultObj = {
-  type: null,
-  destinationName: null,
-  offers: null,
-  destinationInfo: null,
-  price: null,
-  date: null,
-  isFavorite: null,
-};
+import he from "he";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -29,7 +21,7 @@ const generateEventTypeItems = (eventTypes, type) => {
   return eventTypes
     .map((item) => (
       `<div class="event__type-item">
-        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? `checked` : ``}>
+        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? `checked` : ``} required>
         <label class="event__type-label  event__type-label--${item}" for="event-type-${item}-1">${item}</label>
       </div>`))
     .join(`\n`);
@@ -76,18 +68,16 @@ const createEventOffersMarkup = (offers) => {
 
 const createDestinationInfoMarkup = (destinationInfo, destinationName) => {
   return (
-    `<section class="event__details">
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
 
-          <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
-            </div>
-          </div>
-        </section>
-      </section>`
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+        </div>
+      </div>
+    </section>`
   );
 };
 
@@ -110,7 +100,7 @@ const createPriceMarkup = (price) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price ? price : ``}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}" pattern="^[0-9]{1,10}$" required>
     </div>`
   );
 };
@@ -140,7 +130,7 @@ const createDestinationFieldsMarkup = (type, destinationName) => {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type ? type : TRANSFER_TYPE[0]} ${type ? checkEventType(type, ACTIVITY_TYPE) : checkEventType(TRANSFER_TYPE[0], ACTIVITY_TYPE)}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName ? destinationName : ``}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName ? he.encode(destinationName) : ``}" list="destination-list-1" required>
       <datalist id="destination-list-1">
         ${generateOptions(EVENT_DESTINATION)}
       </datalist>
@@ -174,8 +164,24 @@ const createEventTypeBtnMarkup = (type) => {
   );
 };
 
-const createEventEditTemplate = (objData = defaultObj) => {
-  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = objData;
+const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
+  const offerItems = offers.length ? createEventOffersMarkup(offers) : ``;
+  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo, destinationName) : ``;
+
+  if (offerItems || destinationTitle) {
+    return (
+      `<section class="event__details">
+        ${offerItems}
+        ${destinationTitle}
+      </section>`
+    )
+  }
+  return ``;
+
+};
+
+const createEventEditTemplate = (objData) => {
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite, addMode} = objData;
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -190,14 +196,14 @@ const createEventEditTemplate = (objData = defaultObj) => {
         ${createPriceMarkup(price)}
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
+        <button class="event__reset-btn" type="reset">${addMode ? `Cancel` : `Delete`}</button>
 
-        ${isFavorite !== null ? createFavoriteMarkup(isFavorite) : ''}
+        ${isFavorite !== null ? createFavoriteMarkup(isFavorite) : ``}
 
       </header>
 
-      ${offers ? createEventOffersMarkup(offers) : ``}
-      ${destinationName ? createDestinationInfoMarkup(destinationInfo, destinationName) : ''}
+      ${createEventDetailMarkup(offers, destinationName, destinationInfo)}
+
     </form>`
   );
 };
@@ -275,6 +281,7 @@ export default class TripEventEditItem extends SmartView  {
     if (evt.target.value === this._data.type) {
       return;
     }
+
     this.updateData({
       type: evt.target.value,
       offers: generateTripEventOfferData()[evt.target.value],
@@ -326,10 +333,14 @@ export default class TripEventEditItem extends SmartView  {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const isRightValue = EVENT_DESTINATION.some((item) => evt.target.value === item);
+    const index = EVENT_DESTINATION.findIndex((item) => evt.target.value === item);
+    if (index === -1) {
+      evt.currentTarget.setCustomValidity(`Ты поехавший? Выбери из списка городов!`);
+      return;
+    }
 
     this.updateData({
-      destinationName: isRightValue ? evt.target.value : this._data.destinationName,
+      destinationName: evt.target.value,
       destinationInfo: generateTripEventDestinationData(),
     });
   }
@@ -366,10 +377,12 @@ export default class TripEventEditItem extends SmartView  {
   }
 
   setFavoriteChangeHandler(callback) {
-    this._callback.favoriteChange = callback;
-    this.getElement()
-      .querySelector(`.event__favorite-checkbox`)
-      .addEventListener(`change`, this._favoriteChangeHandler);
+    if (!this._data.addMode) {
+      this._callback.favoriteChange = callback;
+      this.getElement()
+        .querySelector(`.event__favorite-checkbox`)
+        .addEventListener(`change`, this._favoriteChangeHandler);
+    }
   }
 
   setDeleteClickHandler(callback) {

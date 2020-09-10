@@ -3,6 +3,23 @@ import {remove, render} from "../utils/render";
 import {generateId} from "../utils/common";
 import {USERACTION, UPDATETYPE, RENDER_POSITION} from "../const";
 
+const defaultData = {
+  type: ``,
+  destinationName: ``,
+  offers: [],
+  destinationInfo: {
+    destinationDescription: null,
+    destinationPhoto: null,
+  },
+  price: 1,
+  date: {
+    startDate: new Date(),
+    endDate: new Date(new Date().getTime() + 3600000),
+  },
+  isFavorite: null,
+  addMode: true,
+};
+
 export default class TripNew {
   constructor(tripListContainer, changeData) {
     this._tripListContainer = tripListContainer;
@@ -20,7 +37,7 @@ export default class TripNew {
       return;
     }
 
-    this._tripEditComponent = new TripEventEditComponent();
+    this._tripEditComponent = new TripEventEditComponent(defaultData);
     this._tripEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -44,7 +61,15 @@ export default class TripNew {
     this._changeData(
       USERACTION.ADD_TRIP,
       UPDATETYPE.MINOR,
-      Object.assign({id: generateId()}, trip)
+      Object.assign(
+        {},
+        trip,
+        {
+          isFavorite: false,
+          addMode: false,
+          id: generateId(),
+        }
+      )
     );
     this.destroy();
   }
