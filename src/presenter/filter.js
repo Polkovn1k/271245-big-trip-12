@@ -1,7 +1,10 @@
+import {filterChangeType, dataUpdateType, renderPosition} from "../const";
+
 import FilterView from "../components/filter-component";
+
 import {render, replace, remove} from "../utils/render";
 import {filter} from "../utils/filter";
-import {filterChangeType, dataUpdateType, renderPosition} from "../const";
+
 
 export default class Filter {
   constructor(filterContainer, filterModel, tripModel) {

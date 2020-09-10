@@ -1,8 +1,8 @@
-import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils/common';
+import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from "../utils/common";
 
 const MAX_TITLE_ITEMS = 5;
 
-const eventOfferTitle = [
+const EVENT_OFFER_TITLE = [
   `Choose the radio station`,
   `Choose temperature`,
   `Drive slowly`,
@@ -43,9 +43,9 @@ const getOffersArray = (arrayLength) => {
   return new Array(arrayLength)
     .fill(``)
     .map(() => ({
-      title: getRandomItemFromArray(eventOfferTitle),
+      title: getRandomItemFromArray(EVENT_OFFER_TITLE),
       price: getRandomNumberFromInterval(randomPriceSettings.MIN_PRICE, randomPriceSettings.MAX_PRICE, randomPriceSettings.MULTIPLE),
-      checked: Math.random() > 0.5 ? true : false,
+      checked: Math.random() > 0.5,
     }));
 };
 

@@ -1,19 +1,19 @@
-import {renderPosition, itemSortType, dataUpdateType, userActionType, filterChangeType} from '../const';
+import {renderPosition, itemSortType, dataUpdateType, userActionType, filterChangeType} from "../const";
 
-import Sort from '../components/sort-component';
-import TripPresenter from './trip';
+import Sort from "../components/sort-component";
+import TripPresenter from "./trip";
 import NewTripPresenter from "./new-trip";
-import TripDaysList from '../components/trip-days-list-component';
-import TripDaysItem from '../components/trip-days-item-component';
-import TripEventList from '../components/trip-events-list-component';
-import NoPoints from '../components/no-points-component';
-
-import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
-import {render, remove} from '../utils/render';
-import {filter} from "../utils/filter.js";
+import TripDaysList from "../components/trip-days-list-component";
+import TripDaysItem from "../components/trip-days-item-component";
+import TripEventList from "../components/trip-events-list-component";
+import NoPoints from "../components/no-points-component";
 import InfoContainer from "../components/info-container-component";
 import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
+
+import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
+import {render, remove} from "../utils/render";
+import {filter} from "../utils/filter";
 
 export default class Trip {
   constructor(container, tripModel, filterModel) {

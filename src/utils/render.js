@@ -1,4 +1,4 @@
-import {renderPosition} from '../const';
+import {renderPosition} from "../const";
 
 import Abstract from "../components/abstract";
 
@@ -32,14 +32,6 @@ const render = (container, child, place) => {
       container.before(child);
       break;
   }
-};
-
-const renderTemplate = (container, template, place) => {
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
-
-  container.insertAdjacentHTML(place, template);
 };
 
 const replace = (newChild, oldChild) => {
@@ -76,7 +68,6 @@ const remove = (component) => {
 export {
   createElement,
   render,
-  renderTemplate,
   replace,
   remove,
 };

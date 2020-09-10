@@ -1,4 +1,4 @@
-import {itemSortType} from '../const';
+import {itemSortType} from "../const";
 
 import AbstractView from "./abstract.js";
 

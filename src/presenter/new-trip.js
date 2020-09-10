@@ -1,7 +1,10 @@
+import {userActionType, dataUpdateType, renderPosition} from "../const";
+
 import TripEventEditComponent from "../components/event-edit-component";
+
 import {remove, render} from "../utils/render";
 import {generateId} from "../utils/common";
-import {userActionType, dataUpdateType, renderPosition} from "../const";
+
 
 const defaultData = {
   type: ``,
@@ -59,17 +62,18 @@ export default class TripNew {
 
   _handleFormSubmit(trip) {
     this._changeData(
-      userActionType.ADD_TRIP,
-      dataUpdateType.MINOR,
-      Object.assign(
-        {},
-        trip,
-        {
-          isFavorite: false,
-          addMode: false,
-          id: generateId(),
-        }
-      )
+        userActionType.ADD_TRIP,
+        dataUpdateType.MINOR,
+        Object
+          .assign(
+              {},
+              trip,
+              {
+                isFavorite: false,
+                addMode: false,
+                id: generateId(),
+              }
+          )
     );
     this.destroy();
   }

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from "moment";
 
 const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
 

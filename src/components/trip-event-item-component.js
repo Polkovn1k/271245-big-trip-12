@@ -1,7 +1,10 @@
-import {ACTIVITY_TYPE} from '../const';
-import {checkEventType} from '../utils/common';
-import {formatTime, timeDuration} from '../utils/date-time';
+import {ACTIVITY_TYPE} from "../const";
+
 import AbstractView from "./abstract.js";
+
+import {checkEventType} from "../utils/common";
+import {formatTime, timeDuration} from "../utils/date-time";
+
 
 const getEventSelectedOffersTemplate = (offerData) => {
   return offerData

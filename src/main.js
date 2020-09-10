@@ -39,5 +39,3 @@ document.querySelector(`.trip-main__event-add-btn`)
     evt.currentTarget.disabled = true;
     mainTripPresenter.createTrip();
   });
-
-console.dir(tripEventItems);

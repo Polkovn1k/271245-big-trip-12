@@ -1,9 +1,9 @@
-import {renderPosition, userActionType, dataUpdateType} from '../const';
+import {renderPosition, userActionType, dataUpdateType} from "../const";
 
-import TripEventItem from '../components/trip-event-item-component';
-import TripEventEditItem from '../components/event-edit-component';
+import TripEventItem from "../components/trip-event-item-component";
+import TripEventEditItem from "../components/event-edit-component";
 
-import {render, replace, remove} from '../utils/render';
+import {render, replace, remove} from "../utils/render";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -20,8 +20,8 @@ export default class Trip {
     this._tripEventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handleEditClick  = this._handleEditClick.bind(this);
-    this._handleFormSubmit  = this._handleFormSubmit.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleFavoriteChange = this._handleFavoriteChange.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
@@ -64,7 +64,7 @@ export default class Trip {
     if (isEscKey) {
       this._replaceEditToEvent();
     }
-  };
+  }
 
   _handleEditClick() {
     this._replaceEventToEdit();
@@ -73,32 +73,33 @@ export default class Trip {
 
   _handleFormSubmit(data) {
     this._changeData(
-      userActionType.UPDATE_TRIP,
-      dataUpdateType.MINOR,
-      data,
+        userActionType.UPDATE_TRIP,
+        dataUpdateType.MINOR,
+        data
     );
     this._replaceEditToEvent();
   }
 
   _handleFavoriteChange() {
     this._changeData(
-      userActionType.UPDATE_TRIP,
-      dataUpdateType.PATCH,
-      Object.assign(
-        {},
-        this._data,
-        {
-          isFavorite: !this._data.isFavorite
-        }
-      )
+        userActionType.UPDATE_TRIP,
+        dataUpdateType.PATCH,
+        Object
+          .assign(
+              {},
+              this._data,
+              {
+                isFavorite: !this._data.isFavorite
+              }
+          )
     );
   }
 
   _handleDeleteClick(data) {
     this._changeData(
-      userActionType.DELETE_TRIP,
-      dataUpdateType.MINOR,
-      data
+        userActionType.DELETE_TRIP,
+        dataUpdateType.MINOR,
+        data
     );
     this._replaceEditToEvent();
   }
@@ -107,13 +108,13 @@ export default class Trip {
     replace(this._tripEventComponent, this._tripEventEditComponent);
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
     this._mode = Mode.DEFAULT;
-  };
+  }
 
   _replaceEventToEdit() {
     replace(this._tripEventEditComponent, this._tripEventComponent);
     this._changeMode();
     this._mode = Mode.EDITING;
-  };
+  }
 
   destroy() {
     remove(this._tripEventComponent);

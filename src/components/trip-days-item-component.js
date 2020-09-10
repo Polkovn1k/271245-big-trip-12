@@ -1,6 +1,6 @@
 import AbstractView from "./abstract.js";
 
-import {formatDate} from '../utils/date-time';
+import {formatDate} from "../utils/date-time";
 
 const createTripDaysItemTemplate = (tripDay, count) => {
   const date = tripDay ? formatDate(new Date(tripDay)) : ``;

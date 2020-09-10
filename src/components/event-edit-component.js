@@ -1,11 +1,11 @@
-import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
+import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from "../const";
 
 import SmartView from "./smart.js";
 
 import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
-import {checkEventType} from '../utils/common';
-import {formatTime, castTimeFormat} from '../utils/date-time';
-import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
+import {checkEventType} from "../utils/common";
+import {formatTime, castTimeFormat} from "../utils/date-time";
+import {generateTripEventOfferData} from "../mock-data/trip-event-offer-data";
 import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 
 import he from "he";
@@ -173,7 +173,7 @@ const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
         ${offerItems}
         ${destinationTitle}
       </section>`
-    )
+    );
   }
   return ``;
 
@@ -207,7 +207,7 @@ const createEventEditTemplate = (objData) => {
   );
 };
 
-export default class TripEventEditItem extends SmartView  {
+export default class TripEventEditItem extends SmartView {
   constructor(data) {
     super();
     this._data = data;
@@ -263,8 +263,8 @@ export default class TripEventEditItem extends SmartView  {
       this._flatpickrEnd = null;
     }
 
-    this._flatpickrStart = this._getFlatpickrStart(this._data.date.startDate, this._startDateChangeHandler);
-    this._flatpickrEnd = this._getFlatpickrEnd(this._data.date.endDate, this._endDateChangeHandler);
+    this._flatpickrStart = this._getFlatpickrStart(this._data.date.startDate, this._startDateChangeHandler, this);
+    this._flatpickrEnd = this._getFlatpickrEnd(this._data.date.endDate, this._endDateChangeHandler, this);
   }
 
   _setInnerHandlers() {
@@ -315,30 +315,34 @@ export default class TripEventEditItem extends SmartView  {
   }
 
   _startDateChangeHandler(startDate) {
-    let date = Object.assign(
-      {},
-      {
-        startDate: new Date(startDate),
-        endDate: this._data.date.endDate > new Date(startDate)
-          ? this._data.date.endDate
-          : new Date(new Date(startDate).getTime() + 3600000),
-      }
-    );
+    let date = Object
+      .assign(
+          {},
+          {
+            startDate: new Date(startDate),
+            endDate: this._data.date.endDate > new Date(startDate)
+              ? this._data.date.endDate
+              : new Date(new Date(startDate).getTime() + 3600000),
+          }
+      );
+
     this.updateData({
       date,
     });
   }
 
   _endDateChangeHandler(endDate) {
-    let date = Object.assign(
-      {},
-      {
-        endDate: new Date(endDate),
-        startDate: this._data.date.startDate < new Date(endDate)
-          ? this._data.date.startDate
-          : new Date(new Date(endDate).getTime() - 3600000),
-      }
-    );
+    let date = Object
+      .assign(
+          {},
+          {
+            endDate: new Date(endDate),
+            startDate: this._data.date.startDate < new Date(endDate)
+              ? this._data.date.startDate
+              : new Date(new Date(endDate).getTime() - 3600000),
+          }
+      );
+
     this.updateData({
       date,
     });
@@ -359,7 +363,7 @@ export default class TripEventEditItem extends SmartView  {
   }
 
   _priceInputHandler(evt) {
-    let value = Number.parseInt(evt.target.value);
+    let value = Number.parseInt(evt.target.value, 16);
     if (isNaN(value)) {
       return;
     }
