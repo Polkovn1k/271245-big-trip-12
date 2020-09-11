@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "flatpickr": "4.6.6",
+    "he": "1.2.0",
     "moment": "2.27.0",
     "webpack": "4.44.1",
     "webpack-cli": "3.3.12",

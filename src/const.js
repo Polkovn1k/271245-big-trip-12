@@ -57,23 +57,52 @@ const MONTH_NAMES = [
   `DEC`,
 ];
 
-const RANDOM_PRICE_SETTINGS = {
+const randomPriceSettings = {
   MIN_PRICE: 1000,
   MAX_PRICE: 10000,
   MULTIPLE: 10,
 };
 
-const RENDER_POSITION = {
+const renderPosition = {
   BEFOREBEGIN: `beforebegin`,
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
 };
 
-const SORT_TYPE = {
+const itemSortType = {
   EVENT: `sort-event`,
   TIME: `sort-time`,
   PRICE: `sort-price`,
 };
 
-export {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION, MONTH_NAMES, RANDOM_PRICE_SETTINGS, RENDER_POSITION, SORT_TYPE};
+const userActionType = {
+  UPDATE_TRIP: `UPDATE`,
+  ADD_TRIP: `ADD`,
+  DELETE_TRIP: `DELETE`,
+};
+
+const dataUpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`,
+};
+
+const filterChangeType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
+
+export {
+  TRANSFER_TYPE,
+  ACTIVITY_TYPE,
+  EVENT_DESTINATION,
+  MONTH_NAMES,
+  randomPriceSettings,
+  renderPosition,
+  itemSortType,
+  userActionType,
+  dataUpdateType,
+  filterChangeType,
+};

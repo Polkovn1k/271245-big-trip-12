@@ -1,11 +1,14 @@
-import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../const';
-import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
-import {generateTripEventOfferData} from '../mock-data/trip-event-offer-data';
-import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
+import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from "../const";
+
 import SmartView from "./smart.js";
-import flatpickr from "flatpickr";
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import "../../node_modules/flatpickr/dist/themes/material_blue.css";
+
+import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
+import {checkEventType} from "../utils/common";
+import {formatTime, castTimeFormat} from "../utils/date-time";
+import {generateTripEventOfferData} from "../mock-data/trip-event-offer-data";
+import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
+
+import he from "he";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -17,7 +20,7 @@ const generateEventTypeItems = (eventTypes, type) => {
   return eventTypes
     .map((item) => (
       `<div class="event__type-item">
-        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? `checked` : ``}>
+        <input id="event-type-${item}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? `checked` : ``} required>
         <label class="event__type-label  event__type-label--${item}" for="event-type-${item}-1">${item}</label>
       </div>`))
     .join(`\n`);
@@ -51,100 +54,160 @@ const generateOptions = (optValue) => {
     .join(`\n`);
 };
 
+const createEventOffersMarkup = (offers) => {
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${getEventOfferSelecterTemplate(offers)}
+      </div>
+    </section>`
+  );
+};
+
+const createDestinationInfoMarkup = (destinationInfo, destinationName) => {
+  return (
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
+
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+        </div>
+      </div>
+    </section>`
+  );
+};
+
+const createFavoriteMarkup = (isFavorite) => {
+  return (
+    `<input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
+      <label class="event__favorite-btn" for="event-favorite-1">
+        <span class="visually-hidden">Add to favorite</span>
+        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+        </svg>
+      </label>`
+  );
+};
+
+const createPriceMarkup = (price) => {
+  return (
+    `<div class="event__field-group  event__field-group--price">
+      <label class="event__label" for="event-price-1">
+        <span class="visually-hidden">Price</span>
+        &euro;
+      </label>
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}" pattern="^[0-9]{1,10}$" required>
+    </div>`
+  );
+};
+
+const createTimeMarkup = (date) => {
+  const startDate = date ? `${getDateString(date.startDate)} ${formatTime(date.startDate)}` : `${getDateString(new Date(Date.now()))} ${formatTime(new Date(Date.now()))}`;
+  const endDate = date ? `${getDateString(date.endDate)} ${formatTime(date.endDate)}` : `${getDateString(new Date(Date.now()))} ${formatTime(new Date(Date.now()))}`;
+
+  return (
+    `<div class="event__field-group  event__field-group--time">
+      <label class="visually-hidden" for="event-start-time-1">
+        From
+      </label>
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate}">
+      &mdash;
+      <label class="visually-hidden" for="event-end-time-1">
+        To
+      </label>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
+    </div>`
+  );
+};
+
+const createDestinationFieldsMarkup = (type, destinationName) => {
+  return (
+    `<div class="event__field-group  event__field-group--destination">
+      <label class="event__label  event__type-output" for="event-destination-1">
+        ${type ? type : TRANSFER_TYPE[0]} ${type ? checkEventType(type, ACTIVITY_TYPE) : checkEventType(TRANSFER_TYPE[0], ACTIVITY_TYPE)}
+      </label>
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName ? he.encode(destinationName) : ``}" list="destination-list-1" required>
+      <datalist id="destination-list-1">
+        ${generateOptions(EVENT_DESTINATION)}
+      </datalist>
+    </div>`
+  );
+};
+
+const createEventTypeListMarkup = (type = TRANSFER_TYPE[0]) => {
+  return (
+    `<div class="event__type-list">
+      <fieldset class="event__type-group">
+        <legend class="visually-hidden">Transfer</legend>
+        ${generateEventTypeItems(TRANSFER_TYPE, type)}
+      </fieldset>
+
+      <fieldset class="event__type-group">
+        <legend class="visually-hidden">Activity</legend>
+        ${generateEventTypeItems(ACTIVITY_TYPE, type)}
+      </fieldset>
+    </div>`
+  );
+};
+
+const createEventTypeBtnMarkup = (type) => {
+  return (
+    `<label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <span class="visually-hidden">Choose event type</span>
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${type ? type.toLowerCase() : TRANSFER_TYPE[0].toLowerCase()}.png" alt="Event type icon">
+    </label>
+    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">`
+  );
+};
+
+const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
+  const offerItems = offers.length ? createEventOffersMarkup(offers) : ``;
+  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo, destinationName) : ``;
+
+  if (offerItems || destinationTitle) {
+    return (
+      `<section class="event__details">
+        ${offerItems}
+        ${destinationTitle}
+      </section>`
+    );
+  }
+  return ``;
+
+};
+
 const createEventEditTemplate = (objData) => {
-  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = objData;
-  const favoriteStatus = isFavorite ? `checked` : ``;
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite, addMode} = objData;
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
-          <label class="event__type  event__type-btn" for="event-type-toggle-1">
-            <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
-          </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-
-          <div class="event__type-list">
-            <fieldset class="event__type-group">
-              <legend class="visually-hidden">Transfer</legend>
-              ${generateEventTypeItems(TRANSFER_TYPE, type)}
-            </fieldset>
-
-            <fieldset class="event__type-group">
-              <legend class="visually-hidden">Activity</legend>
-              ${generateEventTypeItems(ACTIVITY_TYPE, type)}
-            </fieldset>
-          </div>
+          ${createEventTypeBtnMarkup(type)}
+          ${createEventTypeListMarkup(type)}
         </div>
 
-        <div class="event__field-group  event__field-group--destination">
-          <label class="event__label  event__type-output" for="event-destination-1">
-            ${type} ${checkEventType(type, ACTIVITY_TYPE)}
-          </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
-          <datalist id="destination-list-1">
-            ${generateOptions(EVENT_DESTINATION)}
-          </datalist>
-        </div>
-
-        <div class="event__field-group  event__field-group--time">
-          <label class="visually-hidden" for="event-start-time-1">
-            From
-          </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateString(date.startDate)} ${formatTime(date.startDate)}">
-          &mdash;
-          <label class="visually-hidden" for="event-end-time-1">
-            To
-          </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateString(date.endDate)} ${formatTime(date.endDate)}">
-        </div>
-
-        <div class="event__field-group  event__field-group--price">
-          <label class="event__label" for="event-price-1">
-            <span class="visually-hidden">Price</span>
-            &euro;
-          </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
-        </div>
+        ${createDestinationFieldsMarkup(type, destinationName)}
+        ${createTimeMarkup(date)}
+        ${createPriceMarkup(price)}
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Cancel</button>
+        <button class="event__reset-btn" type="reset">${addMode ? `Cancel` : `Delete`}</button>
 
-        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favoriteStatus}>
-        <label class="event__favorite-btn" for="event-favorite-1">
-          <span class="visually-hidden">Add to favorite</span>
-          <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-            <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-          </svg>
-        </label>
+        ${isFavorite !== null ? createFavoriteMarkup(isFavorite) : ``}
 
       </header>
 
-      <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      ${createEventDetailMarkup(offers, destinationName, destinationInfo)}
 
-          <div class="event__available-offers">
-            ${getEventOfferSelecterTemplate(offers)}
-          </div>
-        </section>
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
-
-          <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
-            </div>
-          </div>
-        </section>
-      </section>
     </form>`
   );
 };
 
-export default class TripEventEditItem extends SmartView  {
+export default class TripEventEditItem extends SmartView {
   constructor(data) {
     super();
     this._data = data;
@@ -159,9 +222,24 @@ export default class TripEventEditItem extends SmartView  {
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+
+    this._getFlatpickrStart = getFlatpickrStart.bind(this);
+    this._getFlatpickrEnd = getFlatpickrEnd.bind(this);
 
     this._setInnerHandlers();
-    this._setDatepicker();
+    this._setDatePickers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
   }
 
   getTemplate() {
@@ -170,12 +248,14 @@ export default class TripEventEditItem extends SmartView  {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this._setDatepicker();
+
+    this._setDatePickers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFavoriteChangeHandler(this._callback.favoriteChange);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
-  _setDatepicker() {
+  _setDatePickers() {
     if (this._flatpickrStart && this._flatpickrEnd) {
       this._flatpickrStart.destroy();
       this._flatpickrStart = null;
@@ -183,27 +263,8 @@ export default class TripEventEditItem extends SmartView  {
       this._flatpickrEnd = null;
     }
 
-    const startDateElement = this.getElement().querySelector(`.event__input--time[name="event-start-time"]`);
-    this._flatpickrStart = flatpickr(startDateElement, {
-      enableTime: true,
-      altInput: true,
-      allowInput: true,
-      dateFormat: `Y/m/d H:i`,
-      altFormat: `Y/m/d H:i`,
-      defaultDate: this._data.date.startDate,
-      onChange: this._startDateChangeHandler,
-    });
-
-    const endDateElement = this.getElement().querySelector(`.event__input--time[name="event-end-time"]`);
-    this._flatpickrStart = flatpickr(endDateElement, {
-      enableTime: true,
-      altInput: true,
-      allowInput: true,
-      dateFormat: `Y/m/d H:i`,
-      altFormat: `Y/m/d H:i`,
-      defaultDate: this._data.date.endDate,
-      onChange: this._endDateChangeHandler,
-    });
+    this._flatpickrStart = this._getFlatpickrStart(this._data.date.startDate, this._startDateChangeHandler, this);
+    this._flatpickrEnd = this._getFlatpickrEnd(this._data.date.endDate, this._endDateChangeHandler, this);
   }
 
   _setInnerHandlers() {
@@ -233,6 +294,7 @@ export default class TripEventEditItem extends SmartView  {
     if (evt.target.value === this._data.type) {
       return;
     }
+
     this.updateData({
       type: evt.target.value,
       offers: generateTripEventOfferData()[evt.target.value],
@@ -253,30 +315,34 @@ export default class TripEventEditItem extends SmartView  {
   }
 
   _startDateChangeHandler(startDate) {
-    let date = Object.assign(
-      {},
-      {
-        startDate: new Date(startDate),
-        endDate: this._data.date.endDate > new Date(startDate)
-          ? this._data.date.endDate
-          : new Date(new Date(startDate).getTime() + 3600000),
-      }
-    );
+    let date = Object
+      .assign(
+          {},
+          {
+            startDate: new Date(startDate),
+            endDate: this._data.date.endDate > new Date(startDate)
+              ? this._data.date.endDate
+              : new Date(new Date(startDate).getTime() + 3600000),
+          }
+      );
+
     this.updateData({
       date,
     });
   }
 
   _endDateChangeHandler(endDate) {
-    let date = Object.assign(
-      {},
-      {
-        endDate: new Date(endDate),
-        startDate: this._data.date.startDate < new Date(endDate)
-          ? this._data.date.startDate
-          : new Date(new Date(endDate).getTime() - 3600000),
-      }
-    );
+    let date = Object
+      .assign(
+          {},
+          {
+            endDate: new Date(endDate),
+            startDate: this._data.date.startDate < new Date(endDate)
+              ? this._data.date.startDate
+              : new Date(new Date(endDate).getTime() - 3600000),
+          }
+      );
+
     this.updateData({
       date,
     });
@@ -284,16 +350,20 @@ export default class TripEventEditItem extends SmartView  {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const isRightValue = EVENT_DESTINATION.some((item) => evt.target.value === item);
+    const index = EVENT_DESTINATION.findIndex((item) => evt.target.value === item);
+    if (index === -1) {
+      evt.currentTarget.setCustomValidity(`Ты поехавший? Выбери из списка городов!`);
+      return;
+    }
 
     this.updateData({
-      destinationName: isRightValue ? evt.target.value : this._data.destinationName,
+      destinationName: evt.target.value,
       destinationInfo: generateTripEventDestinationData(),
     });
   }
 
   _priceInputHandler(evt) {
-    let value = Number.parseInt(evt.target.value);
+    let value = Number.parseInt(evt.target.value, 16);
     if (isNaN(value)) {
       return;
     }
@@ -312,6 +382,11 @@ export default class TripEventEditItem extends SmartView  {
     this._callback.favoriteChange();
   }
 
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._data);
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement()
@@ -319,9 +394,17 @@ export default class TripEventEditItem extends SmartView  {
   }
 
   setFavoriteChangeHandler(callback) {
-    this._callback.favoriteChange = callback;
-    this.getElement()
-      .querySelector(`.event__favorite-checkbox`)
-      .addEventListener(`change`, this._favoriteChangeHandler);
+    if (!this._data.addMode) {
+      this._callback.favoriteChange = callback;
+      this.getElement()
+        .querySelector(`.event__favorite-checkbox`)
+        .addEventListener(`change`, this._favoriteChangeHandler);
+    }
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, this._formDeleteClickHandler);
   }
 }

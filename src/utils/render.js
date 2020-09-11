@@ -1,4 +1,5 @@
-import {RENDER_POSITION} from '../const';
+import {renderPosition} from "../const";
+
 import Abstract from "../components/abstract";
 
 const createElement = (template) => {
@@ -18,27 +19,19 @@ const render = (container, child, place) => {
   }
 
   switch (place) {
-    case RENDER_POSITION.AFTERBEGIN:
+    case renderPosition.AFTERBEGIN:
       container.prepend(child);
       break;
-    case RENDER_POSITION.BEFOREEND:
+    case renderPosition.BEFOREEND:
       container.append(child);
       break;
-    case RENDER_POSITION.AFTEREND:
+    case renderPosition.AFTEREND:
       container.after(child);
       break;
-    case RENDER_POSITION.BEFOREBEGIN:
+    case renderPosition.BEFOREBEGIN:
       container.before(child);
       break;
   }
-};
-
-const renderTemplate = (container, template, place) => {
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
-
-  container.insertAdjacentHTML(place, template);
 };
 
 const replace = (newChild, oldChild) => {
@@ -60,6 +53,10 @@ const replace = (newChild, oldChild) => {
 };
 
 const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
   if (!(component instanceof Abstract)) {
     throw new Error(`Can remove only components`);
   }
@@ -71,7 +68,6 @@ const remove = (component) => {
 export {
   createElement,
   render,
-  renderTemplate,
   replace,
   remove,
 };
