@@ -1,4 +1,4 @@
-import {renderPosition, MenuItem} from './const';
+import {renderPosition, MenuItem, dataUpdateType, filterChangeType} from './const';
 
 import Menu from './components/menu-component';
 
@@ -16,6 +16,7 @@ const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
 const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
+const addNewEventBtn = document.querySelector(`.trip-main__event-add-btn`);
 
 const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
   .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
@@ -37,10 +38,13 @@ render(tripMainControlsTitle, siteMenuComponent, renderPosition.AFTEREND);
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      mainTripPresenter.init(true);
       // Показать доску
       // Скрыть статистику
+      addNewEventBtn.removeAttribute(`disabled`);
       break;
     case MenuItem.STATS:
+      mainTripPresenter.destroy();
       // Скрыть доску
       // Показать статистику
       break;
@@ -49,15 +53,14 @@ const handleSiteMenuClick = (menuItem) => {
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
-
-
-
 filterPresenter.init();
 mainTripPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`)
-  .addEventListener(`click`, (evt) => {
+addNewEventBtn.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     evt.currentTarget.disabled = true;
+    mainTripPresenter.destroy();
+    filterModel.setFilter(dataUpdateType.MAJOR, filterChangeType.EVERYTHING);
+    mainTripPresenter.init(true);
     mainTripPresenter.createTrip();
   });

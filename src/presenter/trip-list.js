@@ -1,4 +1,4 @@
-import {renderPosition, itemSortType, dataUpdateType, userActionType, filterChangeType} from "../const";
+import {renderPosition, itemSortType, dataUpdateType, userActionType} from "../const";
 
 import Sort from "../components/sort-component";
 import TripPresenter from "./trip";
@@ -38,14 +38,24 @@ export default class Trip {
     this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction);
   }
 
-  init() {
+  init(listRerender = false) {
     this._renderMainRender();
-    this._renderInfo();
+    if (listRerender === false) {
+      this._renderInfo();
+    }
+
+    this._tripModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  destroy() {
+    this._clearMainTripList({resetSortType: true});
+
+    this._tripModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createTrip() {
-    this._currentSortType = itemSortType.EVENT;
-    this._filterModel.setFilter(dataUpdateType.MAJOR, filterChangeType.EVERYTHING);
     this._newTripPresenter.init();
   }
 
