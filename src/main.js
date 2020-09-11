@@ -1,4 +1,4 @@
-import {renderPosition} from './const';
+import {renderPosition, MenuItem} from './const';
 
 import Menu from './components/menu-component';
 
@@ -28,7 +28,29 @@ tripModel.setTrips(tripEventItems);
 const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
-render(tripMainControlsTitle, new Menu(), renderPosition.AFTEREND);
+const siteMenuComponent = new Menu();
+
+render(tripMainControlsTitle, siteMenuComponent, renderPosition.AFTEREND);
+
+
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      // Показать доску
+      // Скрыть статистику
+      break;
+    case MenuItem.STATS:
+      // Скрыть доску
+      // Показать статистику
+      break;
+  }
+};
+
+siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+
+
+
 
 filterPresenter.init();
 mainTripPresenter.init();

@@ -94,6 +94,12 @@ const filterChangeType = {
   PAST: `past`,
 };
 
+const MenuItem = {
+  TABLE: `Table`,
+  STATS: `Stats`,
+};
+
+
 export {
   TRANSFER_TYPE,
   ACTIVITY_TYPE,
@@ -105,4 +111,5 @@ export {
   userActionType,
   dataUpdateType,
   filterChangeType,
+  MenuItem,
 };
