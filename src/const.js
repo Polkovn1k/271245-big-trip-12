@@ -7,11 +7,13 @@ const TRANSFER_TYPE = [
   `drive`,
   `flight`,
 ];
+
 const ACTIVITY_TYPE = [
   `check-in`,
   `sightseeing`,
   `restaurant`
 ];
+
 const EVENT_DESTINATION = [
   `Chamonix`,
   `Geneva`,
@@ -42,6 +44,7 @@ const EVENT_DESTINATION = [
   `Valencia`,
   `Madrid`
 ];
+
 const MONTH_NAMES = [
   `JAN`,
   `FEB`,
@@ -56,6 +59,19 @@ const MONTH_NAMES = [
   `NOV`,
   `DEC`,
 ];
+
+const destinationTypeIcons = {
+  'taxi': `🚕`,
+  'bus': `🚌`,
+  'train': `🚂`,
+  'ship': `🛳`,
+  'transport': `🚊`,
+  'drive': `🚗`,
+  'flight': `✈`,
+  'check-in': `🏨`,
+  'sightseeing': `🏛️`,
+  'restaurant': `🍴`
+};
 
 const randomPriceSettings = {
   MIN_PRICE: 1000,
@@ -105,6 +121,7 @@ export {
   ACTIVITY_TYPE,
   EVENT_DESTINATION,
   MONTH_NAMES,
+  destinationTypeIcons,
   randomPriceSettings,
   renderPosition,
   itemSortType,

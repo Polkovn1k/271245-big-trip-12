@@ -1,6 +1,7 @@
 import {renderPosition, MenuItem, dataUpdateType, filterChangeType} from './const';
 
 import Menu from './components/menu-component';
+import Statistics from "./components/statistics.js";
 
 import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
@@ -64,3 +65,6 @@ addNewEventBtn.addEventListener(`click`, (evt) => {
     mainTripPresenter.init(true);
     mainTripPresenter.createTrip();
   });
+
+render(tripEvents, new Statistics(tripModel.getTrips()), renderPosition.AFTEREND);
+//console.dir(tripEventItems);
