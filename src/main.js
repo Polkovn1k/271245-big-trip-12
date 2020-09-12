@@ -10,7 +10,7 @@ import TripModel from "./model/points";
 import FilterModel from "./model/filter";
 
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
-import {render} from './utils/render';
+import {render, remove} from './utils/render';
 
 const TRIP_EVENT_ITEM_QUANTITY = 20;
 const tripMain = document.querySelector(`.trip-main`);
@@ -34,20 +34,19 @@ const siteMenuComponent = new Menu();
 
 render(tripMainControlsTitle, siteMenuComponent, renderPosition.AFTEREND);
 
-
+let statisticsComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      remove(statisticsComponent);
       mainTripPresenter.init(true);
-      // Показать доску
-      // Скрыть статистику
       addNewEventBtn.removeAttribute(`disabled`);
       break;
     case MenuItem.STATS:
       mainTripPresenter.destroy();
-      // Скрыть доску
-      // Показать статистику
+      statisticsComponent = new Statistics(tripModel.getTrips());
+      render(tripEvents, statisticsComponent, renderPosition.AFTEREND);
       break;
   }
 };
@@ -58,13 +57,12 @@ filterPresenter.init();
 mainTripPresenter.init();
 
 addNewEventBtn.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    evt.currentTarget.disabled = true;
-    mainTripPresenter.destroy();
-    filterModel.setFilter(dataUpdateType.MAJOR, filterChangeType.EVERYTHING);
-    mainTripPresenter.init(true);
-    mainTripPresenter.createTrip();
-  });
-
-render(tripEvents, new Statistics(tripModel.getTrips()), renderPosition.AFTEREND);
+  evt.preventDefault();
+  evt.currentTarget.disabled = true;
+  remove(statisticsComponent);
+  mainTripPresenter.destroy();
+  filterModel.setFilter(dataUpdateType.MAJOR, filterChangeType.EVERYTHING);
+  mainTripPresenter.init(true);
+  mainTripPresenter.createTrip();
+});
 //console.dir(tripEventItems);
