@@ -1,10 +1,9 @@
-import {filterChangeType, dataUpdateType, renderPosition} from "../const";
+import {FilterChangeType, DataUpdateType, RenderPosition} from "../const";
 
 import FilterView from "../components/filter-component";
 
 import {render, replace, remove} from "../utils/render";
 import {filter} from "../utils/filter";
-
 
 export default class Filter {
   constructor(filterContainer, filterModel, tripModel) {
@@ -32,7 +31,7 @@ export default class Filter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, renderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -49,7 +48,7 @@ export default class Filter {
       return;
     }
 
-    this._filterModel.setFilter(dataUpdateType.MAJOR, filterType);
+    this._filterModel.setFilter(DataUpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
@@ -57,19 +56,19 @@ export default class Filter {
 
     return [
       {
-        type: filterChangeType.EVERYTHING,
-        name: filterChangeType.EVERYTHING,
-        count: filter[filterChangeType.EVERYTHING](tripData).length
+        type: FilterChangeType.EVERYTHING,
+        name: FilterChangeType.EVERYTHING,
+        count: filter[FilterChangeType.EVERYTHING](tripData).length
       },
       {
-        type: filterChangeType.FUTURE,
-        name: filterChangeType.FUTURE,
-        count: filter[filterChangeType.FUTURE](tripData).length
+        type: FilterChangeType.FUTURE,
+        name: FilterChangeType.FUTURE,
+        count: filter[FilterChangeType.FUTURE](tripData).length
       },
       {
-        type: filterChangeType.PAST,
-        name: filterChangeType.PAST,
-        count: filter[filterChangeType.PAST](tripData).length
+        type: FilterChangeType.PAST,
+        name: FilterChangeType.PAST,
+        count: filter[FilterChangeType.PAST](tripData).length
       },
     ];
   }

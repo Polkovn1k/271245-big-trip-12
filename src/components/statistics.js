@@ -1,8 +1,8 @@
-import {TRANSFER_TYPE, destinationTypeIcons} from '../const';
+import {destinationTypeIcons, ACTIVITY_TYPE} from '../const';
 
-import {getDurationDate} from "../utils/date-time";
+import AbstractView from "./abstract";
 
-import AbstractView from "./abstract.js";
+import {calcPrice, calcTimeSpent} from "../utils/stat";
 
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -27,35 +27,8 @@ const createStatisticsTemplate = () => {
   );
 };
 
-
-
-const calcPrice = (eventDataList, type) => {
-  let priceSum = 0;
-  const price = eventDataList.reduce((acc, item) => {
-    if (item.type === type) {
-      priceSum += parseInt(item.price, 10);
-      acc[item.type] = priceSum;
-    }
-    return acc;
-  }, {});
-  return price[type];
-};
-
-const calcTimeSpent = (eventDataList, type) => {
-  let timeSum = 0;
-  const time = eventDataList.reduce((acc, item) => {
-    if (item.type === type) {
-      const durationTime = getDurationDate(item.date.startDate, item.date.endDate);
-      timeSum += durationTime.asHours();
-      acc[item.type] = Math.round(timeSum);
-    }
-    return acc;
-  }, {});
-  return time[type];
-};
-
 const setTotalMoneyChart = (eventDataList, moneyCtx) => {
-  const eventTypesList = [... new Set(eventDataList.map((item) => item.type))];
+  const eventTypesList = [...new Set(eventDataList.map((item) => item.type))];
   const eventsTotalPriceList = eventTypesList.map((type) => calcPrice(eventDataList, type));
   const uniqueTypeListWithIcons = eventTypesList.map((item) => `${destinationTypeIcons[item]} ${item.toUpperCase()}`);
 
@@ -78,8 +51,8 @@ const setTotalMoneyChart = (eventDataList, moneyCtx) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `€ ${val}`
         }
       },
@@ -126,9 +99,9 @@ const setTotalMoneyChart = (eventDataList, moneyCtx) => {
 };
 
 const setTransportChart = (eventDataList, transportCtx) => {
-  const transportType = eventDataList.filter((item) => item.type !== `restaurant` && item.type !== `check-in` && item.type !== `sightseeing`).map((item) => item.type);
+  const transportType = eventDataList.filter((item) => !ACTIVITY_TYPE.includes(item.type)).map((item) => item.type);
   const uniqueTransportType = [...new Set(transportType)];
-  const transportTypeCount = uniqueTransportType.map(type => eventDataList.filter((dataItem) => dataItem.type === type).length);
+  const transportTypeCount = uniqueTransportType.map((type) => eventDataList.filter((dataItem) => dataItem.type === type).length);
   const uniqueTransportTypeWithIcons = uniqueTransportType.map((item) => `${destinationTypeIcons[item]} ${item.toUpperCase()}`);
 
   return new Chart(transportCtx, {
@@ -150,8 +123,8 @@ const setTransportChart = (eventDataList, transportCtx) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${val}x`
         }
       },
@@ -198,7 +171,7 @@ const setTransportChart = (eventDataList, transportCtx) => {
 };
 
 const setTimeChart = (eventDataList, timeSpendCtx) => {
-  const eventTypesList = [... new Set(eventDataList.map((item) => item.type))];
+  const eventTypesList = [...new Set(eventDataList.map((item) => item.type))];
   const eventsTotalTimeList = eventTypesList.map((type) => calcTimeSpent(eventDataList, type));
   const uniqueTypeListWithIcons = eventTypesList.map((item) => `${destinationTypeIcons[item]} ${item.toUpperCase()}`);
 
@@ -221,8 +194,8 @@ const setTimeChart = (eventDataList, timeSpendCtx) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${val}H`
         }
       },

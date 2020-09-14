@@ -1,4 +1,4 @@
-import {renderPosition} from "../const";
+import {RenderPosition} from "../const";
 
 import Abstract from "../components/abstract";
 
@@ -19,16 +19,16 @@ const render = (container, child, place) => {
   }
 
   switch (place) {
-    case renderPosition.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN:
       container.prepend(child);
       break;
-    case renderPosition.BEFOREEND:
+    case RenderPosition.BEFOREEND:
       container.append(child);
       break;
-    case renderPosition.AFTEREND:
+    case RenderPosition.AFTEREND:
       container.after(child);
       break;
-    case renderPosition.BEFOREBEGIN:
+    case RenderPosition.BEFOREBEGIN:
       container.before(child);
       break;
   }

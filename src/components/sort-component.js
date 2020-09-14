@@ -1,6 +1,6 @@
-import {itemSortType} from "../const";
+import {ItemSortType} from "../const";
 
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 
 const createSortTemplate = (sortType) => {
   return (
@@ -8,12 +8,12 @@ const createSortTemplate = (sortType) => {
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
       <div class="trip-sort__item  trip-sort__item--event">
-        <input id="${itemSortType.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.EVENT}" ${sortType === itemSortType.EVENT ? `checked` : ``}>
+        <input id="${ItemSortType.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${ItemSortType.EVENT}" ${sortType === ItemSortType.EVENT ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-event">Event</label>
       </div>
 
       <div class="trip-sort__item  trip-sort__item--time">
-        <input id="${itemSortType.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.TIME}" ${sortType === itemSortType.TIME ? `checked` : ``}>
+        <input id="${ItemSortType.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${ItemSortType.TIME}" ${sortType === ItemSortType.TIME ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-time">
           Time
           <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
@@ -23,7 +23,7 @@ const createSortTemplate = (sortType) => {
       </div>
 
       <div class="trip-sort__item  trip-sort__item--price">
-        <input id="${itemSortType.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${itemSortType.PRICE}" ${sortType === itemSortType.PRICE ? `checked` : ``}>
+        <input id="${ItemSortType.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${ItemSortType.PRICE}" ${sortType === ItemSortType.PRICE ? `checked` : ``}>
         <label class="trip-sort__btn" for="sort-price">
           Price
           <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">

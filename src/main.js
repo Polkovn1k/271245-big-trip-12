@@ -1,7 +1,7 @@
-import {renderPosition, MenuItem, dataUpdateType, filterChangeType} from './const';
+import {RenderPosition, MenuItem, DataUpdateType, FilterChangeType} from './const';
 
 import Menu from './components/menu-component';
-import Statistics from "./components/statistics.js";
+import Statistics from "./components/statistics";
 
 import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
@@ -32,7 +32,7 @@ const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripM
 
 const siteMenuComponent = new Menu();
 
-render(tripMainControlsTitle, siteMenuComponent, renderPosition.AFTEREND);
+render(tripMainControlsTitle, siteMenuComponent, RenderPosition.AFTEREND);
 
 let statisticsComponent = null;
 
@@ -40,13 +40,15 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
+      mainTripPresenter.destroy();
       mainTripPresenter.init(true);
       addNewEventBtn.removeAttribute(`disabled`);
       break;
     case MenuItem.STATS:
       mainTripPresenter.destroy();
       statisticsComponent = new Statistics(tripModel.getTrips());
-      render(tripEvents, statisticsComponent, renderPosition.AFTEREND);
+      render(tripEvents, statisticsComponent, RenderPosition.AFTEREND);
+      addNewEventBtn.disabled = true;
       break;
   }
 };
@@ -61,8 +63,7 @@ addNewEventBtn.addEventListener(`click`, (evt) => {
   evt.currentTarget.disabled = true;
   remove(statisticsComponent);
   mainTripPresenter.destroy();
-  filterModel.setFilter(dataUpdateType.MAJOR, filterChangeType.EVERYTHING);
+  filterModel.setFilter(DataUpdateType.MAJOR, FilterChangeType.EVERYTHING);
   mainTripPresenter.init(true);
   mainTripPresenter.createTrip();
 });
-//console.dir(tripEventItems);

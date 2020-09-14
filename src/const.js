@@ -70,41 +70,41 @@ const destinationTypeIcons = {
   'flight': `✈`,
   'check-in': `🏨`,
   'sightseeing': `🏛️`,
-  'restaurant': `🍴`
+  'restaurant': `🍴`,
 };
 
-const randomPriceSettings = {
+const RandomPriceSettings = {
   MIN_PRICE: 1000,
   MAX_PRICE: 10000,
   MULTIPLE: 10,
 };
 
-const renderPosition = {
+const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
 };
 
-const itemSortType = {
+const ItemSortType = {
   EVENT: `sort-event`,
   TIME: `sort-time`,
   PRICE: `sort-price`,
 };
 
-const userActionType = {
+const UserActionType = {
   UPDATE_TRIP: `UPDATE`,
   ADD_TRIP: `ADD`,
   DELETE_TRIP: `DELETE`,
 };
 
-const dataUpdateType = {
+const DataUpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
 };
 
-const filterChangeType = {
+const FilterChangeType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`,
@@ -122,11 +122,11 @@ export {
   EVENT_DESTINATION,
   MONTH_NAMES,
   destinationTypeIcons,
-  randomPriceSettings,
-  renderPosition,
-  itemSortType,
-  userActionType,
-  dataUpdateType,
-  filterChangeType,
+  RandomPriceSettings,
+  RenderPosition,
+  ItemSortType,
+  UserActionType,
+  DataUpdateType,
+  FilterChangeType,
   MenuItem,
 };

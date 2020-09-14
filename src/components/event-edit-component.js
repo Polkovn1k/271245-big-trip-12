@@ -1,6 +1,6 @@
 import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from "../const";
 
-import SmartView from "./smart.js";
+import SmartView from "./smart";
 
 import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
 import {checkEventType} from "../utils/common";

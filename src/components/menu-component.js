@@ -1,6 +1,6 @@
-import {MenuItem} from "../const.js";
+import {MenuItem} from "../const";
 
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 
 const createMenuTemplate = () => {
   return (
@@ -31,22 +31,14 @@ export default class Menu extends AbstractView {
     this.getElement()
       .querySelectorAll(`.trip-tabs__btn`)
       .forEach((item) => {
-        item.classList.remove((`trip-tabs__btn--active`))
+        item.classList.remove((`trip-tabs__btn--active`));
       });
     evt.target.classList.add(`trip-tabs__btn--active`);
-    this._callback.menuClick(evt.target.innerHTML);
+    this._callback.menuClick(evt.target.textContent);
   }
 
   setMenuClickHandler(callback) {
     this._callback.menuClick = callback;
     this.getElement().addEventListener(`click`, this._menuClickHandler);
   }
-
-  /*setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`[value=${menuItem}]`);
-
-    if (item !== null) {
-      item.checked = true;
-    }
-  }*/
 }

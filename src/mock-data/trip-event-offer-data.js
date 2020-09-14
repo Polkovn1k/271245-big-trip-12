@@ -33,7 +33,7 @@ const tripEventOfferData = {
   'restaurant': null,
 };
 
-const randomPriceSettings = {
+const RandomPriceSettings = {
   MIN_PRICE: 100,
   MAX_PRICE: 10000,
   MULTIPLE: 10,
@@ -44,7 +44,7 @@ const getOffersArray = (arrayLength) => {
     .fill(``)
     .map(() => ({
       title: getRandomItemFromArray(EVENT_OFFER_TITLE),
-      price: getRandomNumberFromInterval(randomPriceSettings.MIN_PRICE, randomPriceSettings.MAX_PRICE, randomPriceSettings.MULTIPLE),
+      price: getRandomNumberFromInterval(RandomPriceSettings.MIN_PRICE, RandomPriceSettings.MAX_PRICE, RandomPriceSettings.MULTIPLE),
       checked: Math.random() > 0.5,
     }));
 };

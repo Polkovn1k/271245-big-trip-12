@@ -1,6 +1,6 @@
 import {getRandom} from '../utils/common';
 
-const dateSettings = {
+const DateSettings = {
   MAX_INTERVAL_FOR_START_DAY: 15,
   MIN_INTERVAL_FOR_END_DAY: 0.1,
   MAX_INTERVAL_FOR_END_DAY: 0.2,
@@ -9,12 +9,12 @@ const dateSettings = {
 
 const getStartDate = () => {
   if (Math.random() > 0.5) {
-    return Date.now() + (getRandom(dateSettings.MAX_INTERVAL_FOR_START_DAY) * dateSettings.ONE_DAY_ON_MILLISECONDS);
+    return Date.now() + (getRandom(DateSettings.MAX_INTERVAL_FOR_START_DAY) * DateSettings.ONE_DAY_ON_MILLISECONDS);
   }
-  return Date.now() - (getRandom(dateSettings.MAX_INTERVAL_FOR_START_DAY) * dateSettings.ONE_DAY_ON_MILLISECONDS);
+  return Date.now() - (getRandom(DateSettings.MAX_INTERVAL_FOR_START_DAY) * DateSettings.ONE_DAY_ON_MILLISECONDS);
 };
 
-const getEndDate = (startDateValue) => startDateValue + (getRandom(dateSettings.MAX_INTERVAL_FOR_END_DAY, dateSettings.MIN_INTERVAL_FOR_END_DAY) * dateSettings.ONE_DAY_ON_MILLISECONDS);
+const getEndDate = (startDateValue) => startDateValue + (getRandom(DateSettings.MAX_INTERVAL_FOR_END_DAY, DateSettings.MIN_INTERVAL_FOR_END_DAY) * DateSettings.ONE_DAY_ON_MILLISECONDS);
 
 const generateTripEventDateData = () => {
   const startDate = getStartDate();
