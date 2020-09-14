@@ -3,6 +3,7 @@ import {RenderPosition, ItemSortType, DataUpdateType, UserActionType} from "../c
 import Sort from "../components/sort-component";
 import TripPresenter from "./trip";
 import NewTripPresenter from "./new-trip";
+
 import TripDaysList from "../components/trip-days-list-component";
 import TripDaysItem from "../components/trip-days-item-component";
 import TripEventList from "../components/trip-events-list-component";
@@ -196,6 +197,7 @@ export default class Trip {
 
   _renderMainRender() {
     if (!this._getTripsData().length) {
+      render(this._container, this._tripDaysListComponent, RenderPosition.BEFOREEND);
       this._renderNoPoints();
       return;
     }
