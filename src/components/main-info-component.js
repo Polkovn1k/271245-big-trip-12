@@ -1,6 +1,6 @@
 import {MONTH_NAMES} from "../const";
 
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 
 const generateTitle = (array) => {
   if (array.length === 1) {

@@ -1,6 +1,6 @@
 import {ACTIVITY_TYPE} from "../const";
 
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 
 import {checkEventType} from "../utils/common";
 import {formatTime, timeDuration} from "../utils/date-time";

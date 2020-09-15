@@ -1,4 +1,4 @@
-import {renderPosition, userActionType, dataUpdateType} from "../const";
+import {RenderPosition, UserActionType, DataUpdateType} from "../const";
 
 import TripEventItem from "../components/trip-event-item-component";
 import TripEventEditItem from "../components/event-edit-component";
@@ -42,7 +42,7 @@ export default class Trip {
     this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
-      render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
+      render(this._container, this._tripEventComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -73,8 +73,8 @@ export default class Trip {
 
   _handleFormSubmit(data) {
     this._changeData(
-        userActionType.UPDATE_TRIP,
-        dataUpdateType.MINOR,
+        UserActionType.UPDATE_TRIP,
+        DataUpdateType.MINOR,
         data
     );
     this._replaceEditToEvent();
@@ -82,8 +82,8 @@ export default class Trip {
 
   _handleFavoriteChange() {
     this._changeData(
-        userActionType.UPDATE_TRIP,
-        dataUpdateType.PATCH,
+        UserActionType.UPDATE_TRIP,
+        DataUpdateType.PATCH,
         Object
           .assign(
               {},
@@ -97,8 +97,8 @@ export default class Trip {
 
   _handleDeleteClick(data) {
     this._changeData(
-        userActionType.DELETE_TRIP,
-        dataUpdateType.MINOR,
+        UserActionType.DELETE_TRIP,
+        DataUpdateType.MINOR,
         data
     );
     this._replaceEditToEvent();

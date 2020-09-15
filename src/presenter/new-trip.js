@@ -1,10 +1,9 @@
-import {userActionType, dataUpdateType, renderPosition} from "../const";
+import {UserActionType, DataUpdateType, RenderPosition} from "../const";
 
 import TripEventEditComponent from "../components/event-edit-component";
 
 import {remove, render} from "../utils/render";
 import {generateId} from "../utils/common";
-
 
 const defaultData = {
   type: ``,
@@ -44,7 +43,7 @@ export default class TripNew {
     this._tripEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
-    render(this._tripListContainer, this._tripEditComponent, renderPosition.AFTERBEGIN);
+    render(this._tripListContainer, this._tripEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
   }
@@ -58,12 +57,13 @@ export default class TripNew {
     this._tripEditComponent = null;
 
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   }
 
   _handleFormSubmit(trip) {
     this._changeData(
-        userActionType.ADD_TRIP,
-        dataUpdateType.MINOR,
+        UserActionType.ADD_TRIP,
+        DataUpdateType.MINOR,
         Object
           .assign(
               {},

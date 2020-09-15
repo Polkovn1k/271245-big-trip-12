@@ -7,11 +7,13 @@ const TRANSFER_TYPE = [
   `drive`,
   `flight`,
 ];
+
 const ACTIVITY_TYPE = [
   `check-in`,
   `sightseeing`,
   `restaurant`
 ];
+
 const EVENT_DESTINATION = [
   `Chamonix`,
   `Geneva`,
@@ -42,6 +44,7 @@ const EVENT_DESTINATION = [
   `Valencia`,
   `Madrid`
 ];
+
 const MONTH_NAMES = [
   `JAN`,
   `FEB`,
@@ -57,52 +60,73 @@ const MONTH_NAMES = [
   `DEC`,
 ];
 
-const randomPriceSettings = {
+const destinationTypeIcons = {
+  'taxi': `🚕`,
+  'bus': `🚌`,
+  'train': `🚂`,
+  'ship': `🛳`,
+  'transport': `🚊`,
+  'drive': `🚗`,
+  'flight': `✈`,
+  'check-in': `🏨`,
+  'sightseeing': `🏛️`,
+  'restaurant': `🍴`,
+};
+
+const RandomPriceSettings = {
   MIN_PRICE: 1000,
   MAX_PRICE: 10000,
   MULTIPLE: 10,
 };
 
-const renderPosition = {
+const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
 };
 
-const itemSortType = {
+const ItemSortType = {
   EVENT: `sort-event`,
   TIME: `sort-time`,
   PRICE: `sort-price`,
 };
 
-const userActionType = {
+const UserActionType = {
   UPDATE_TRIP: `UPDATE`,
   ADD_TRIP: `ADD`,
   DELETE_TRIP: `DELETE`,
 };
 
-const dataUpdateType = {
+const DataUpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
 };
 
-const filterChangeType = {
+const FilterChangeType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`,
 };
+
+const MenuItem = {
+  TABLE: `Table`,
+  STATS: `Stats`,
+};
+
 
 export {
   TRANSFER_TYPE,
   ACTIVITY_TYPE,
   EVENT_DESTINATION,
   MONTH_NAMES,
-  randomPriceSettings,
-  renderPosition,
-  itemSortType,
-  userActionType,
-  dataUpdateType,
-  filterChangeType,
+  destinationTypeIcons,
+  RandomPriceSettings,
+  RenderPosition,
+  ItemSortType,
+  UserActionType,
+  DataUpdateType,
+  FilterChangeType,
+  MenuItem,
 };

@@ -6,9 +6,10 @@ const formatTime = (date) => moment(date).format(`hh:mm`);
 
 const formatDate = (date) => moment(date).format(`DD MMMM`);
 
+const getDurationDate = (start, end) => moment.duration(moment(end).diff(moment(start)));
+
 const timeDuration = (start, end) => {
-  const momentDiff = moment(end).diff(moment(start));
-  const momentDuration = moment.duration(momentDiff);
+  const momentDuration = getDurationDate(start, end);
 
   const duration = {
     days: momentDuration.get(`days`) > 0 ? `${castTimeFormat(momentDuration.get(`days`))}D` : ``,
@@ -23,5 +24,6 @@ export {
   castTimeFormat,
   formatTime,
   formatDate,
+  getDurationDate,
   timeDuration,
 };
