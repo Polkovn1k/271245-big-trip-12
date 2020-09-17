@@ -10,9 +10,9 @@ import {generateTripEventDestinationData} from "../mock-data/trip-event-destinat
 
 import he from "he";
 
-const generatePhoto = (imgSrcArr, destinationName) => {
-  return imgSrcArr
-    .map((item, i) => (`<img class="event__photo" src="${item}" alt="${destinationName} - photo №${i + 1}">`))
+const generatePhoto = (imgDataItem) => {
+  return imgDataItem
+    .map((item) => (`<img class="event__photo" src="${item.src}" alt="${item.description}">`))
     .join(`\n`);
 };
 
@@ -65,15 +65,15 @@ const createEventOffersMarkup = (offers) => {
   );
 };
 
-const createDestinationInfoMarkup = (destinationInfo, destinationName) => {
+const createDestinationInfoMarkup = (destinationInfo) => {
   return (
     `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
+      <p class="event__destination-description">${destinationInfo.destinationDescription}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+          ${generatePhoto(destinationInfo.destinationPhoto)}
         </div>
       </div>
     </section>`
@@ -165,7 +165,7 @@ const createEventTypeBtnMarkup = (type) => {
 
 const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
   const offerItems = offers.length ? createEventOffersMarkup(offers) : ``;
-  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo, destinationName) : ``;
+  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo) : ``;
 
   if (offerItems || destinationTitle) {
     return (

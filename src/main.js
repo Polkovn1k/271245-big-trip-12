@@ -9,10 +9,15 @@ import FilterPresenter from "./presenter/filter";
 import TripModel from "./model/points";
 import FilterModel from "./model/filter";
 
+import Api from "./api/api";
+
 import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 import {render, remove} from './utils/render';
 
 const TRIP_EVENT_ITEM_QUANTITY = 20;
+const AUTHORIZATION = `Basic qw34dfgfg34j`;
+const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
+
 const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
@@ -21,6 +26,13 @@ const addNewEventBtn = document.querySelector(`.trip-main__event-add-btn`);
 
 const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
   .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getTrip()
+  .then((eventData) => {
+  console.log(eventData[0]);
+    console.log(tripEventItems[0]);
+});
 
 const tripModel = new TripModel();
 const filterModel = new FilterModel();
