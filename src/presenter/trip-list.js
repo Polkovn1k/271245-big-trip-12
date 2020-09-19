@@ -30,6 +30,9 @@ export default class Trip {
     this._tripDaysListComponent = new TripDaysList();
     this._noPointsComponent = new NoPoints();
     this._loadingComponent = new Loading();
+    this._infoContainerComponent = null;
+    this._costComponent = null;
+    this._mainInfoComponent = null;
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -42,11 +45,8 @@ export default class Trip {
     this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction);
   }
 
-  init(listRerender = false) {
+  init() {
     this._renderMainRender();
-    if (listRerender === false) {
-      this._renderInfo();
-    }
 
     this._tripModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -203,6 +203,9 @@ export default class Trip {
     remove(this._noPointsComponent);
     remove(this._tripDaysListComponent);
     remove(this._loadingComponent);
+    remove(this._infoContainerComponent);
+    remove(this._costComponent);
+    remove(this._mainInfoComponent);
 
     if (resetSortType) {
       this._currentSortType = ItemSortType.EVENT;
@@ -221,18 +224,26 @@ export default class Trip {
       return;
     }
 
+    this._renderInfoContainer();
     this._renderSort();
     render(this._container, this._tripDaysListComponent, RenderPosition.BEFOREEND);
     this._renderTrips();
   }
 
-  _renderInfo() {
-    const tripMain = document.querySelector(`.trip-main`);
-    const infoContainer = new InfoContainer();
-    render(tripMain, infoContainer, RenderPosition.AFTERBEGIN);
-    render(infoContainer, new Cost(), RenderPosition.BEFOREEND);
-    if (this._getTripsData().length) {
-      render(tripMain, new MainInfo(this._getTripsData()), RenderPosition.AFTERBEGIN);
+  _renderInfoContainer() {
+    if (this._infoContainerComponent !== null) {
+      this._infoContainerComponent = null;
+      this._costComponent = null;
+      this._mainInfoComponent = null;
     }
+
+    this._infoContainerComponent = new InfoContainer();
+    render(document.querySelector(`.trip-main`), this._infoContainerComponent, RenderPosition.AFTERBEGIN);
+
+    this._costComponent = new Cost();
+    this._mainInfoComponent = new MainInfo(this._getTripsData());
+
+    render(this._infoContainerComponent, this._costComponent, RenderPosition.BEFOREEND);
+    render(this._infoContainerComponent, this._mainInfoComponent, RenderPosition.AFTERBEGIN);
   }
 }
