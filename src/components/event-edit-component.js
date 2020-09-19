@@ -363,7 +363,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _priceInputHandler(evt) {
-    let value = Number.parseInt(evt.target.value, 16);
+    let value = Number.parseInt(evt.target.value, 10);
     if (isNaN(value)) {
       return;
     }

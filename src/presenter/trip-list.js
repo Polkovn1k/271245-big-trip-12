@@ -250,7 +250,7 @@ export default class Trip {
     this._infoContainerComponent = new InfoContainer();
     render(document.querySelector(`.trip-main`), this._infoContainerComponent, RenderPosition.AFTERBEGIN);
 
-    this._costComponent = new Cost();
+    this._costComponent = new Cost(this._getTripsData());
     this._mainInfoComponent = new MainInfo(this._getTripsData());
 
     render(this._infoContainerComponent, this._costComponent, RenderPosition.BEFOREEND);

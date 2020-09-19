@@ -43,10 +43,10 @@ const createMainInfoTemplate = (eventsArray) => {
 export default class MainInfo extends AbstractView {
   constructor(data) {
     super();
-    this._infoData = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createMainInfoTemplate(this._infoData);
+    return createMainInfoTemplate(this._data);
   }
 }
