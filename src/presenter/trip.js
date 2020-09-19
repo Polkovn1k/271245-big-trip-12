@@ -11,10 +11,12 @@ const Mode = {
 };
 
 export default class Trip {
-  constructor(container, changeData, changeMode) {
+  constructor(container, changeData, changeMode, optionsModel) {
     this._container = container;
     this._changeData = changeData;
     this._changeMode = changeMode;
+
+    this._optionsModel = optionsModel;
 
     this._tripEventComponent = null;
     this._tripEventEditComponent = null;

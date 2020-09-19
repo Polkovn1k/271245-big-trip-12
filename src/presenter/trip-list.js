@@ -18,9 +18,10 @@ import {render, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
 export default class Trip {
-  constructor(container, tripModel, filterModel) {
+  constructor(container, tripModel, filterModel, optionsModel) {
     this._tripModel = tripModel;
     this._filterModel = filterModel;
+    this._optionsModel = optionsModel;
     this._container = container;
     this._currentSortType = ItemSortType.EVENT;
     this._tripPresenterObserver = {};
@@ -42,7 +43,7 @@ export default class Trip {
     this._tripModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction);
+    this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction, this._optionsModel);
   }
 
   init() {
@@ -148,7 +149,7 @@ export default class Trip {
   }
 
   _renderTripEventItem(eventsContainer, currentDayEvent) {
-    const tripPresenter = new TripPresenter(eventsContainer, this._handleViewAction, this._handleModeChange);
+    const tripPresenter = new TripPresenter(eventsContainer, this._handleViewAction, this._handleModeChange, this._optionsModel);
     tripPresenter.init(currentDayEvent);
     this._tripPresenterObserver[currentDayEvent.id] = tripPresenter;
   }

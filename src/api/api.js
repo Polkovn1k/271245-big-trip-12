@@ -22,6 +22,24 @@ export default class Api {
       .then((eventsData) => eventsData.map(TripModel.adaptToClient));
   }
 
+  getDestinations() {
+    return this._load({url: `destinations`})
+      .then(Api.toJSON)
+      .then((response) => response);
+  }
+
+  getOffers() {
+    return this._load({url: `offers`})
+      .then(Api.toJSON)
+  }
+
+  getOptions() {
+    return Promise.all([
+      this.getDestinations(),
+      this.getOffers(),
+    ])
+  }
+
   updateTrip(eventData) {
     return this._load({
       url: `points/${eventData.id}`,
@@ -30,7 +48,6 @@ export default class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(TripModel.adaptToClient);
   }
 
   _load({

@@ -7,6 +7,7 @@ import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
 
 import TripModel from "./model/points";
+import OptionsModel from "./model/options";
 import FilterModel from "./model/filter";
 
 import Api from "./api/api";
@@ -32,10 +33,19 @@ api.getTrip()
     tripModel.setTrips(DataUpdateType.INIT, []);
   });
 
+api.getOptions()
+  .then((optionsList) => {
+    optionsModel.setOptions(optionsList);
+  })
+  .catch(() => {
+    optionsModel.setOptions([]);
+  });
+
 const tripModel = new TripModel();
+const optionsModel = new OptionsModel();
 const filterModel = new FilterModel();
 
-const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
+const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel, optionsModel);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
 const siteMenuComponent = new Menu();
@@ -75,3 +85,4 @@ addNewEventBtn.addEventListener(`click`, (evt) => {
   mainTripPresenter.init();
   mainTripPresenter.createTrip();
 });
+

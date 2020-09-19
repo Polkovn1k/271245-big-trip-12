@@ -23,9 +23,11 @@ const defaultData = {
 };
 
 export default class TripNew {
-  constructor(tripListContainer, changeData) {
+  constructor(tripListContainer, changeData, optionsModel) {
     this._tripListContainer = tripListContainer;
     this._changeData = changeData;
+
+    this._optionsModel = optionsModel;
 
     this._tripEditComponent = null;
 
