@@ -6,7 +6,7 @@ import {remove, render} from "../utils/render";
 import {generateId} from "../utils/common";
 
 const defaultData = {
-  type: ``,
+  type: `taxi`,
   destinationName: ``,
   offers: [],
   destinationInfo: {
