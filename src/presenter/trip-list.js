@@ -52,8 +52,11 @@ export default class Trip {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  destroy() {
+  destroy({onlyMainList = false} = {}) {
     this._clearMainTripList({resetSortType: true});
+    if (!onlyMainList) {
+      this._clearHeader();
+    }
 
     this._tripModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
@@ -84,16 +87,19 @@ export default class Trip {
         break;
       case DataUpdateType.MINOR:
         this._clearMainTripList();
+        this._clearHeader();
         this._renderMainRender();
         break;
       case DataUpdateType.MAJOR:
         this._clearMainTripList({resetSortType: true});
+        this._clearHeader();
         this._renderMainRender();
         break;
       case DataUpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
         this._clearMainTripList({resetSortType: true});
+        this._clearHeader();
         this._renderMainRender();
         break;
     }
@@ -106,6 +112,7 @@ export default class Trip {
 
     this._currentSortType = sortType;
     this._clearMainTripList();
+    this._clearHeader();
     this._renderMainRender();
   }
 
@@ -199,17 +206,20 @@ export default class Trip {
       .forEach((tripPresenter) => tripPresenter.destroy());
     this._tripPresenterObserver = {};
 
-    remove(this._sortComponent);
     remove(this._noPointsComponent);
     remove(this._tripDaysListComponent);
     remove(this._loadingComponent);
-    remove(this._infoContainerComponent);
-    remove(this._costComponent);
-    remove(this._mainInfoComponent);
+    remove(this._sortComponent);
 
     if (resetSortType) {
       this._currentSortType = ItemSortType.EVENT;
     }
+  }
+
+  _clearHeader() {
+    remove(this._infoContainerComponent);
+    remove(this._costComponent);
+    remove(this._mainInfoComponent);
   }
 
   _renderMainRender() {

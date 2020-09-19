@@ -70,8 +70,8 @@ export default class Points extends Observer {
         price: eventData.base_price,
         type: eventData.type,
         date: {
-          endDate: new Date(eventData.date_from),
-          startDate: new Date(eventData.date_to),
+          endDate: new Date(eventData.date_to),
+          startDate: new Date(eventData.date_from),
         },
         addMode: false,
       }
@@ -82,7 +82,6 @@ export default class Points extends Observer {
     delete adaptedEventData.date_to;
     delete adaptedEventData.destination;
     delete adaptedEventData.is_favorite;
-
     return adaptedEventData;
   }
 

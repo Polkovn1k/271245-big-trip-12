@@ -2,7 +2,6 @@ import {RenderPosition, MenuItem, DataUpdateType, FilterChangeType} from './cons
 
 import Menu from './components/menu-component';
 import Statistics from "./components/statistics";
-//import MainInfo from "./components/main-info-component";
 
 import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
@@ -41,12 +40,6 @@ const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripM
 
 const siteMenuComponent = new Menu();
 
-/*setTimeout(() => {
-  if (tripModel.getTrips().length) {
-    render(tripMain, new MainInfo(tripModel.getTrips()), RenderPosition.AFTERBEGIN);
-  }
-}, 5000);*/
-
 render(tripMainControlsTitle, siteMenuComponent, RenderPosition.AFTEREND);
 
 let statisticsComponent = null;
@@ -60,7 +53,7 @@ const handleSiteMenuClick = (menuItem) => {
       addNewEventBtn.removeAttribute(`disabled`);
       break;
     case MenuItem.STATS:
-      mainTripPresenter.destroy();
+      mainTripPresenter.destroy({onlyMainList: true});
       statisticsComponent = new Statistics(tripModel.getTrips());
       render(tripEvents, statisticsComponent, RenderPosition.AFTEREND);
       addNewEventBtn.disabled = true;
