@@ -11,6 +11,7 @@ import NoPoints from "../components/no-points-component";
 import InfoContainer from "../components/info-container-component";
 import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
+import Loading from "../components/loading";
 
 import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
 import {render, remove} from "../utils/render";
@@ -23,10 +24,12 @@ export default class Trip {
     this._container = container;
     this._currentSortType = ItemSortType.EVENT;
     this._tripPresenterObserver = {};
+    this._isLoading = true;
 
     this._sortComponent = null;
     this._tripDaysListComponent = new TripDaysList();
     this._noPointsComponent = new NoPoints();
+    this._loadingComponent = new Loading();
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -84,6 +87,12 @@ export default class Trip {
         this._renderMainRender();
         break;
       case DataUpdateType.MAJOR:
+        this._clearMainTripList({resetSortType: true});
+        this._renderMainRender();
+        break;
+      case DataUpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._clearMainTripList({resetSortType: true});
         this._renderMainRender();
         break;
@@ -176,7 +185,11 @@ export default class Trip {
   }
 
   _renderNoPoints() {
-    render(this._container, this._noPointsComponent, RenderPosition.BEFOREEND);
+    render(this._container, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._container, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   _clearMainTripList({resetSortType = false} = {}) {
@@ -189,6 +202,7 @@ export default class Trip {
     remove(this._sortComponent);
     remove(this._noPointsComponent);
     remove(this._tripDaysListComponent);
+    remove(this._loadingComponent);
 
     if (resetSortType) {
       this._currentSortType = ItemSortType.EVENT;
@@ -196,6 +210,11 @@ export default class Trip {
   }
 
   _renderMainRender() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (!this._getTripsData().length) {
       render(this._container, this._tripDaysListComponent, RenderPosition.BEFOREEND);
       this._renderNoPoints();

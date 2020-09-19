@@ -11,10 +11,10 @@ import FilterModel from "./model/filter";
 
 import Api from "./api/api";
 
-import {generateTripEventsData} from "./mock-data/trip-event-item-data";
+//import {generateTripEventsData} from "./mock-data/trip-event-item-data";
 import {render, remove} from './utils/render';
 
-const TRIP_EVENT_ITEM_QUANTITY = 20;
+//const TRIP_EVENT_ITEM_QUANTITY = 20;
 const AUTHORIZATION = `Basic qw34dfgfg34j`;
 const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
 
@@ -24,20 +24,28 @@ const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
 const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
 const addNewEventBtn = document.querySelector(`.trip-main__event-add-btn`);
 
-const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
-  .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
+//const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY).sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getTrip()
+/*api.getTrip()
   .then((eventData) => {
   console.log(eventData[0]);
     console.log(tripEventItems[0]);
-});
+});*/
+
+api.getTrip()
+  .then((eventDataList) => {
+    tripModel.setTrips(DataUpdateType.INIT, eventDataList);
+    console.dir(eventDataList);
+  })
+  .catch(() => {
+    tripModel.setTrips(DataUpdateType.INIT, []);
+  });
 
 const tripModel = new TripModel();
 const filterModel = new FilterModel();
 
-tripModel.setTrips(tripEventItems);
+//tripModel.setTrips(tripEventItems);
 
 const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
