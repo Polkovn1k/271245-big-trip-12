@@ -5,8 +5,6 @@ import SmartView from "./smart";
 import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
 import {checkEventType} from "../utils/common";
 import {formatTime, castTimeFormat} from "../utils/date-time";
-import {generateTripEventOfferData} from "../mock-data/trip-event-offer-data";
-import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 
 import he from "he";
 
@@ -121,6 +119,18 @@ const createTimeMarkup = (date) => {
       <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
     </div>`
   );
+};
+
+const generateDestinationInfo = (destinationList, target) => {
+  const obj = destinationList.find(item => item.name === target);
+  return {
+    destinationDescription: obj.description,
+    destinationPhoto: obj.pictures,
+  }
+};
+
+const generateOfferItems = (offersList, target) => {
+  return offersList.find(item => item.type === target).offers;
 };
 
 const createDestinationFieldsMarkup = (type, destinationName) => {
@@ -298,7 +308,10 @@ export default class TripEventEditItem extends SmartView {
 
     this.updateData({
       type: evt.target.value,
-      offers: generateTripEventOfferData()[evt.target.value],
+      offers: generateOfferItems(this._offers, evt.target.value),
+      /*offers: this._data.offers.length
+        ? generateOfferItems(this._offers, evt.target.value)
+        : generateOfferItems(this._offers, `taxi`),*/
     });
   }
 
@@ -359,7 +372,7 @@ export default class TripEventEditItem extends SmartView {
 
     this.updateData({
       destinationName: evt.target.value,
-      destinationInfo: generateTripEventDestinationData(),
+      destinationInfo: generateDestinationInfo(this._destinations, evt.target.value),
     });
   }
 
@@ -375,6 +388,15 @@ export default class TripEventEditItem extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
+    if (!this._data.offers.length) {
+      this._data = Object
+        .assign(
+          this._data,
+          {
+            offers: generateOfferItems(this._offers, `taxi`),
+          }
+        );
+    }
     this._callback.formSubmit(this._data);
   }
 

@@ -29,6 +29,8 @@ api.getAllTripData()
   .then((allData) => {
     tripModel.setTrips(DataUpdateType.INIT, allData.tripData);
     optionsModel.setOptions(DataUpdateType.INIT, allData.optionsData);
+    console.log(allData.tripData[0]);
+    console.log(allData.optionsData);
   })
   .catch(() => {
     tripModel.setTrips(DataUpdateType.INIT, []);
