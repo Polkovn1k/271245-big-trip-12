@@ -73,7 +73,13 @@ export default class TripNew {
               }
           )
     );
-    this.destroy();
+  }
+
+  setSaving() {
+    this._tripEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
   }
 
   _handleDeleteClick() {

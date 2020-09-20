@@ -10,6 +10,11 @@ const Mode = {
   EDITING: `EDITING`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`
+};
+
 export default class Trip {
   constructor(container, changeData, changeMode) {
     this._container = container;
@@ -52,7 +57,8 @@ export default class Trip {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._tripEventEditComponent, prevEventEditComponent);
+      replace(this._tripEventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -78,7 +84,6 @@ export default class Trip {
         DataUpdateType.MINOR,
         data
     );
-    this._replaceEditToEvent();
   }
 
   _handleFavoriteChange() {
@@ -125,6 +130,23 @@ export default class Trip {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceEditToEvent();
+    }
+  }
+
+  setViewState(state) {
+    switch (state) {
+      case State.SAVING:
+        this._tripEventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._tripEventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
     }
   }
 }
