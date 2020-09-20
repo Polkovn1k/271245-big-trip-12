@@ -1,12 +1,16 @@
-export default class Options {
+import Observer from "../utils/observer";
+
+export default class Options extends Observer {
   constructor() {
+    super();
     this._destinations = [];
     this._offers = [];
   }
 
-  setOptions(options) {
-    this._destinations = options[0];
-    this._offers = options[1];
+  setOptions(updateType, options) {
+    this._destinations = options.destination;
+    this._offers = options.offers;
+    this._notify(updateType);
   }
 
   getDestinations() {

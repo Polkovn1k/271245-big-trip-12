@@ -41,7 +41,7 @@ export default class TripNew {
       return;
     }
 
-    this._tripEditComponent = new TripEventEditComponent(defaultData);
+    this._tripEditComponent = new TripEventEditComponent(defaultData, this._optionsModel);
     this._tripEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 

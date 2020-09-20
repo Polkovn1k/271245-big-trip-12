@@ -42,6 +42,7 @@ export default class Trip {
 
     this._tripModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._optionsModel.addObserver(this._handleModelEvent);
 
     this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction, this._optionsModel);
   }
@@ -51,6 +52,7 @@ export default class Trip {
 
     this._tripModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._optionsModel.addObserver(this._handleModelEvent);
   }
 
   destroy({onlyMainList = false} = {}) {
@@ -61,6 +63,7 @@ export default class Trip {
 
     this._tripModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
+    this._optionsModel.removeObserver(this._handleModelEvent);
   }
 
   createTrip() {

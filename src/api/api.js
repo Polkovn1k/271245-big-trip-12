@@ -16,6 +16,23 @@ export default class Api {
     this._authorization = authorization;
   }
 
+  getAllTripData() {
+    return Promise.all([
+      this.getTrip(),
+      this.getDestinations(),
+      this.getOffers(),
+    ])
+      .then((arr) => {
+        return {
+          tripData: arr[0],
+          optionsData: {
+            destination: arr[1],
+            offers: arr[2],
+          },
+        };
+      });
+  }
+
   getTrip() {
     return this._load({url: `points`})
       .then(Api.toJSON)
@@ -25,19 +42,11 @@ export default class Api {
   getDestinations() {
     return this._load({url: `destinations`})
       .then(Api.toJSON)
-      .then((response) => response);
   }
 
   getOffers() {
     return this._load({url: `offers`})
       .then(Api.toJSON)
-  }
-
-  getOptions() {
-    return Promise.all([
-      this.getDestinations(),
-      this.getOffers(),
-    ])
   }
 
   updateTrip(eventData) {

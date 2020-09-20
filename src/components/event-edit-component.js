@@ -208,9 +208,11 @@ const createEventEditTemplate = (objData) => {
 };
 
 export default class TripEventEditItem extends SmartView {
-  constructor(data) {
+  constructor(data, optionsData) {
     super();
     this._data = data;
+    this._destinations = optionsData.getDestinations();
+    this._offers = optionsData.getOffers();
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
 
@@ -233,7 +235,6 @@ export default class TripEventEditItem extends SmartView {
 
   removeElement() {
     super.removeElement();
-
     if (this._flatpickrStart && this._flatpickrEnd) {
       this._flatpickrStart.destroy();
       this._flatpickrStart = null;

@@ -25,20 +25,14 @@ const addNewEventBtn = document.querySelector(`.trip-main__event-add-btn`);
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getTrip()
-  .then((eventDataList) => {
-    tripModel.setTrips(DataUpdateType.INIT, eventDataList);
+api.getAllTripData()
+  .then((allData) => {
+    tripModel.setTrips(DataUpdateType.INIT, allData.tripData);
+    optionsModel.setOptions(DataUpdateType.INIT, allData.optionsData);
   })
   .catch(() => {
     tripModel.setTrips(DataUpdateType.INIT, []);
-  });
-
-api.getOptions()
-  .then((optionsList) => {
-    optionsModel.setOptions(optionsList);
-  })
-  .catch(() => {
-    optionsModel.setOptions([]);
+    optionsModel.setOptions(DataUpdateType.INIT, []);
   });
 
 const tripModel = new TripModel();
