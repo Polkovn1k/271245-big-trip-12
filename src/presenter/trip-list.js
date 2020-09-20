@@ -18,7 +18,7 @@ import {render, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
 export default class Trip {
-  constructor(container, tripModel, filterModel, optionsModel) {
+  constructor(container, tripModel, filterModel, optionsModel, api) {
     this._tripModel = tripModel;
     this._filterModel = filterModel;
     this._optionsModel = optionsModel;
@@ -26,6 +26,8 @@ export default class Trip {
     this._currentSortType = ItemSortType.EVENT;
     this._tripPresenterObserver = {};
     this._isLoading = true;
+
+    this._api = api;
 
     this._sortComponent = null;
     this._tripDaysListComponent = new TripDaysList();
@@ -74,6 +76,11 @@ export default class Trip {
     switch (actionType) {
       case UserActionType.UPDATE_TRIP:
         this._tripModel.updateTrip(updateType, update);
+
+        this._api.updateTrip(update)
+          .then((response) => {
+            this._tripModel.updateTrip(updateType, response);
+        });
         break;
       case UserActionType.ADD_TRIP:
         this._tripModel.addTrip(updateType, update);

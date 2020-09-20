@@ -29,8 +29,6 @@ api.getAllTripData()
   .then((allData) => {
     tripModel.setTrips(DataUpdateType.INIT, allData.tripData);
     optionsModel.setOptions(DataUpdateType.INIT, allData.optionsData);
-    console.log(allData.tripData[0]);
-    console.log(allData.optionsData);
   })
   .catch(() => {
     tripModel.setTrips(DataUpdateType.INIT, []);
@@ -41,7 +39,7 @@ const tripModel = new TripModel();
 const optionsModel = new OptionsModel();
 const filterModel = new FilterModel();
 
-const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel, optionsModel);
+const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel, optionsModel, api);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
 const siteMenuComponent = new Menu();

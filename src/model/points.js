@@ -60,7 +60,7 @@ export default class Points extends Observer {
       {},
       eventData,
       {
-        id: +eventData.id,
+        id: Number.parseInt(eventData.id),
         isFavorite: eventData.is_favorite,
         destinationName: eventData.destination.name,
         destinationInfo: {
@@ -91,8 +91,8 @@ export default class Points extends Observer {
       eventData,
       {
         "base_price": eventData.price,
-        "date_from": eventData.date.startDate,
-        "date_to": eventData.date.endDate,
+        "date_from": new Date(eventData.date.startDate).toISOString(),
+        "date_to": new Date(eventData.date.endDate).toISOString(),
         "destination": {
           description: eventData.destinationInfo.destinationDescription,
           name: eventData.destinationName,
