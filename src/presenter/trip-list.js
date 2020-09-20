@@ -44,7 +44,7 @@ export default class Trip {
     this._filterModel.addObserver(this._handleModelEvent);
     this._optionsModel.addObserver(this._handleModelEvent);
 
-    this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction, this._optionsModel);
+    this._newTripPresenter = new NewTripPresenter(this._tripDaysListComponent, this._handleViewAction);
   }
 
   init() {
@@ -67,7 +67,7 @@ export default class Trip {
   }
 
   createTrip() {
-    this._newTripPresenter.init();
+    this._newTripPresenter.init(this._optionsModel);
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -151,9 +151,9 @@ export default class Trip {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderTripEventItem(eventsContainer, currentDayEvent) {
-    const tripPresenter = new TripPresenter(eventsContainer, this._handleViewAction, this._handleModeChange, this._optionsModel);
-    tripPresenter.init(currentDayEvent);
+  _renderTripEventItem(eventsContainer, currentDayEvent, optionsData) {
+    const tripPresenter = new TripPresenter(eventsContainer, this._handleViewAction, this._handleModeChange);
+    tripPresenter.init(currentDayEvent, this._optionsModel);
     this._tripPresenterObserver[currentDayEvent.id] = tripPresenter;
   }
 

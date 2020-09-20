@@ -23,11 +23,9 @@ const defaultData = {
 };
 
 export default class TripNew {
-  constructor(tripListContainer, changeData, optionsModel) {
+  constructor(tripListContainer, changeData) {
     this._tripListContainer = tripListContainer;
     this._changeData = changeData;
-
-    this._optionsModel = optionsModel;
 
     this._tripEditComponent = null;
 
@@ -36,12 +34,12 @@ export default class TripNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(options) {
     if (this._tripEditComponent !== null) {
       return;
     }
 
-    this._tripEditComponent = new TripEventEditComponent(defaultData, this._optionsModel);
+    this._tripEditComponent = new TripEventEditComponent(defaultData, options);
     this._tripEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
