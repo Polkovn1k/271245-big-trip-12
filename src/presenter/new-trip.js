@@ -6,7 +6,7 @@ import {remove, render} from "../utils/render";
 import {generateId} from "../utils/common";
 
 const defaultData = {
-  type: ``,
+  type: `taxi`,
   destinationName: ``,
   offers: [],
   destinationInfo: {
@@ -34,12 +34,12 @@ export default class TripNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(options) {
     if (this._tripEditComponent !== null) {
       return;
     }
 
-    this._tripEditComponent = new TripEventEditComponent(defaultData);
+    this._tripEditComponent = new TripEventEditComponent(defaultData, options);
     this._tripEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 

@@ -27,14 +27,15 @@ export default class Trip {
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
-  init(tripData) {
+  init(tripData, options) {
     this._data = tripData;
+    this._optionsModel = options;
 
     const prevEventComponent = this._tripEventComponent;
     const prevEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventItem(tripData);
-    this._tripEventEditComponent = new TripEventEditItem(tripData);
+    this._tripEventEditComponent = new TripEventEditItem(tripData, options);
 
     this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);

@@ -6,8 +6,9 @@ export default class Points extends Observer {
     this._trips = [];
   }
 
-  setTrips(trips) {
+  setTrips(updateType, trips) {
     this._trips = trips.slice();
+    this._notify(updateType);
   }
 
   getTrips() {
@@ -52,5 +53,65 @@ export default class Points extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToClient(eventData) {
+    const adaptedEventData = Object.assign(
+      {},
+      eventData,
+      {
+        id: Number.parseInt(eventData.id),
+        isFavorite: eventData.is_favorite,
+        destinationName: eventData.destination.name,
+        destinationInfo: {
+          destinationDescription: eventData.destination.description,
+          destinationPhoto: eventData.destination.pictures,
+        },
+        price: eventData.base_price,
+        type: eventData.type,
+        date: {
+          endDate: new Date(eventData.date_to),
+          startDate: new Date(eventData.date_from),
+        },
+        addMode: false,
+      }
+    );
+
+    delete adaptedEventData.base_price;
+    delete adaptedEventData.date_from;
+    delete adaptedEventData.date_to;
+    delete adaptedEventData.destination;
+    delete adaptedEventData.is_favorite;
+    return adaptedEventData;
+  }
+
+  static adaptToServer(eventData) {
+    const adaptedEventData = Object.assign(
+      {},
+      eventData,
+      {
+        "base_price": eventData.price,
+        "date_from": new Date(eventData.date.startDate).toISOString(),
+        "date_to": new Date(eventData.date.endDate).toISOString(),
+        "destination": {
+          description: eventData.destinationInfo.destinationDescription,
+          name: eventData.destinationName,
+          pictures: eventData.destinationInfo.destinationPhoto,
+        },
+        "id": `${eventData.id}`,
+        "is_favorite": eventData.isFavorite,
+        "offers": eventData.offers,
+        "type": eventData.type,
+      }
+    );
+
+    delete adaptedEventData.addMode;
+    delete adaptedEventData.date;
+    delete adaptedEventData.destinationInfo;
+    delete adaptedEventData.destinationName;
+    delete adaptedEventData.isFavorite;
+    delete adaptedEventData.price;
+
+    return adaptedEventData;
   }
 }

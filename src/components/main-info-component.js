@@ -3,6 +3,9 @@ import {MONTH_NAMES} from "../const";
 import AbstractView from "./abstract";
 
 const generateTitle = (array) => {
+  if (!array.length) {
+    return ``;
+  }
   if (array.length === 1) {
     return array[0].destinationName;
   }
@@ -14,6 +17,9 @@ const generateTitle = (array) => {
 };
 
 const generateDates = (array) => {
+  if (!array.length) {
+    return ``;
+  }
   const startMonth = MONTH_NAMES[new Date(array[0].date.startDate).getMonth()];
   const endMonth = MONTH_NAMES[new Date(array[array.length - 1].date.endDate).getMonth()];
   const startDate = array[0].date.startDate.getDate();
@@ -24,9 +30,7 @@ const generateDates = (array) => {
 
 const createMainInfoTemplate = (eventsArray) => {
 
-  const sortedEvents = eventsArray
-    .slice()
-    .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
+  const sortedEvents = eventsArray ? eventsArray.slice().sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate)) : '';
 
   return (
     `<div class="trip-info__main">
@@ -39,10 +43,10 @@ const createMainInfoTemplate = (eventsArray) => {
 export default class MainInfo extends AbstractView {
   constructor(data) {
     super();
-    this._infoData = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createMainInfoTemplate(this._infoData);
+    return createMainInfoTemplate(this._data);
   }
 }

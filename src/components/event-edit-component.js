@@ -5,14 +5,12 @@ import SmartView from "./smart";
 import {getFlatpickrStart, getFlatpickrEnd} from "./date-picker";
 import {checkEventType} from "../utils/common";
 import {formatTime, castTimeFormat} from "../utils/date-time";
-import {generateTripEventOfferData} from "../mock-data/trip-event-offer-data";
-import {generateTripEventDestinationData} from "../mock-data/trip-event-destination-data";
 
 import he from "he";
 
-const generatePhoto = (imgSrcArr, destinationName) => {
-  return imgSrcArr
-    .map((item, i) => (`<img class="event__photo" src="${item}" alt="${destinationName} - photo №${i + 1}">`))
+const generatePhoto = (imgDataItem) => {
+  return imgDataItem
+    .map((item) => (`<img class="event__photo" src="${item.src}" alt="${item.description}">`))
     .join(`\n`);
 };
 
@@ -65,15 +63,15 @@ const createEventOffersMarkup = (offers) => {
   );
 };
 
-const createDestinationInfoMarkup = (destinationInfo, destinationName) => {
+const createDestinationInfoMarkup = (destinationInfo) => {
   return (
     `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
+      <p class="event__destination-description">${destinationInfo.destinationDescription}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+          ${generatePhoto(destinationInfo.destinationPhoto)}
         </div>
       </div>
     </section>`
@@ -123,6 +121,18 @@ const createTimeMarkup = (date) => {
   );
 };
 
+const generateDestinationInfo = (destinationList, target) => {
+  const obj = destinationList.find(item => item.name === target);
+  return {
+    destinationDescription: obj.description,
+    destinationPhoto: obj.pictures,
+  }
+};
+
+const generateOfferItems = (offersList, target) => {
+  return offersList.find(item => item.type === target).offers;
+};
+
 const createDestinationFieldsMarkup = (type, destinationName) => {
   return (
     `<div class="event__field-group  event__field-group--destination">
@@ -165,7 +175,7 @@ const createEventTypeBtnMarkup = (type) => {
 
 const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
   const offerItems = offers.length ? createEventOffersMarkup(offers) : ``;
-  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo, destinationName) : ``;
+  const destinationTitle = destinationName ? createDestinationInfoMarkup(destinationInfo) : ``;
 
   if (offerItems || destinationTitle) {
     return (
@@ -208,9 +218,11 @@ const createEventEditTemplate = (objData) => {
 };
 
 export default class TripEventEditItem extends SmartView {
-  constructor(data) {
+  constructor(data, optionsData) {
     super();
     this._data = data;
+    this._destinations = optionsData.getDestinations();
+    this._offers = optionsData.getOffers();
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
 
@@ -233,7 +245,6 @@ export default class TripEventEditItem extends SmartView {
 
   removeElement() {
     super.removeElement();
-
     if (this._flatpickrStart && this._flatpickrEnd) {
       this._flatpickrStart.destroy();
       this._flatpickrStart = null;
@@ -297,7 +308,10 @@ export default class TripEventEditItem extends SmartView {
 
     this.updateData({
       type: evt.target.value,
-      offers: generateTripEventOfferData()[evt.target.value],
+      offers: generateOfferItems(this._offers, evt.target.value),
+      /*offers: this._data.offers.length
+        ? generateOfferItems(this._offers, evt.target.value)
+        : generateOfferItems(this._offers, `taxi`),*/
     });
   }
 
@@ -358,12 +372,12 @@ export default class TripEventEditItem extends SmartView {
 
     this.updateData({
       destinationName: evt.target.value,
-      destinationInfo: generateTripEventDestinationData(),
+      destinationInfo: generateDestinationInfo(this._destinations, evt.target.value),
     });
   }
 
   _priceInputHandler(evt) {
-    let value = Number.parseInt(evt.target.value, 16);
+    let value = Number.parseInt(evt.target.value, 10);
     if (isNaN(value)) {
       return;
     }
@@ -374,6 +388,15 @@ export default class TripEventEditItem extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
+    if (!this._data.offers.length) {
+      this._data = Object
+        .assign(
+          this._data,
+          {
+            offers: generateOfferItems(this._offers, `taxi`),
+          }
+        );
+    }
     this._callback.formSubmit(this._data);
   }
 

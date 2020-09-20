@@ -7,27 +7,39 @@ import TripsPresenter from './presenter/trip-list';
 import FilterPresenter from "./presenter/filter";
 
 import TripModel from "./model/points";
+import OptionsModel from "./model/options";
 import FilterModel from "./model/filter";
 
-import {generateTripEventsData} from "./mock-data/trip-event-item-data";
+import Api from "./api/api";
+
 import {render, remove} from './utils/render';
 
-const TRIP_EVENT_ITEM_QUANTITY = 20;
+const AUTHORIZATION = `Basic qw34dfgfg34j`;
+const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
+
 const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
 const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
 const addNewEventBtn = document.querySelector(`.trip-main__event-add-btn`);
 
-const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
-  .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getAllTripData()
+  .then((allData) => {
+    tripModel.setTrips(DataUpdateType.INIT, allData.tripData);
+    optionsModel.setOptions(DataUpdateType.INIT, allData.optionsData);
+  })
+  .catch(() => {
+    tripModel.setTrips(DataUpdateType.INIT, []);
+    optionsModel.setOptions(DataUpdateType.INIT, []);
+  });
 
 const tripModel = new TripModel();
+const optionsModel = new OptionsModel();
 const filterModel = new FilterModel();
 
-tripModel.setTrips(tripEventItems);
-
-const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel);
+const mainTripPresenter = new TripsPresenter(tripEvents, tripModel, filterModel, optionsModel, api);
 const filterPresenter = new FilterPresenter(tripMainControls, filterModel, tripModel);
 
 const siteMenuComponent = new Menu();
@@ -41,11 +53,11 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.TABLE:
       remove(statisticsComponent);
       mainTripPresenter.destroy();
-      mainTripPresenter.init(true);
+      mainTripPresenter.init();
       addNewEventBtn.removeAttribute(`disabled`);
       break;
     case MenuItem.STATS:
-      mainTripPresenter.destroy();
+      mainTripPresenter.destroy({onlyMainList: true});
       statisticsComponent = new Statistics(tripModel.getTrips());
       render(tripEvents, statisticsComponent, RenderPosition.AFTEREND);
       addNewEventBtn.disabled = true;
@@ -64,6 +76,7 @@ addNewEventBtn.addEventListener(`click`, (evt) => {
   remove(statisticsComponent);
   mainTripPresenter.destroy();
   filterModel.setFilter(DataUpdateType.MAJOR, FilterChangeType.EVERYTHING);
-  mainTripPresenter.init(true);
+  mainTripPresenter.init();
   mainTripPresenter.createTrip();
 });
+
