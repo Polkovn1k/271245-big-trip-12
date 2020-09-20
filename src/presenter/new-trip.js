@@ -3,7 +3,6 @@ import {UserActionType, DataUpdateType, RenderPosition} from "../const";
 import TripEventEditComponent from "../components/event-edit-component";
 
 import {remove, render} from "../utils/render";
-import {generateId} from "../utils/common";
 
 const defaultData = {
   type: `taxi`,
@@ -71,7 +70,6 @@ export default class TripNew {
               {
                 isFavorite: false,
                 addMode: false,
-                id: generateId(),
               }
           )
     );

@@ -2,12 +2,14 @@ import TripModel from "../model/points";
 
 const Method = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
   MIN: 200,
-  MAX: 299
+  MAX: 299,
 };
 
 export default class Api {
@@ -58,6 +60,24 @@ export default class Api {
     })
       .then(Api.toJSON)
       .then((eventsData) => TripModel.adaptToClient(eventsData));
+  }
+
+  addTrip(eventData) {
+    return this._load({
+      url: `points`,
+      method: Method.POST,
+      body: JSON.stringify(TripModel.adaptToServer(eventData)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON)
+      .then(TripModel.adaptToClient);
+  }
+
+  deleteTrip(eventData) {
+    return this._load({
+      url: `points/${eventData.id}`,
+      method: Method.DELETE
+    });
   }
 
   _load({

@@ -13,7 +13,7 @@ import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
 import Loading from "../components/loading";
 
-import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
+import {generateTripDays, getTripDaysString} from "../utils/common";
 import {render, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
@@ -75,18 +75,22 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserActionType.UPDATE_TRIP:
-        this._tripModel.updateTrip(updateType, update);
-
         this._api.updateTrip(update)
           .then((response) => {
             this._tripModel.updateTrip(updateType, response);
         });
         break;
       case UserActionType.ADD_TRIP:
-        this._tripModel.addTrip(updateType, update);
+        this._api.addTrip(update)
+          .then((response) => {
+            this._tripModel.addTrip(updateType, response);
+        });
         break;
       case UserActionType.DELETE_TRIP:
-        this._tripModel.deleteTrip(updateType, update);
+        this._api.deleteTrip(update)
+          .then(() => {
+            this._tripModel.deleteTrip(updateType, update);
+        });
         break;
     }
   }
