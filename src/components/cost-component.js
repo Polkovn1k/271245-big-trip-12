@@ -1,7 +1,7 @@
 import AbstractView from "./abstract";
 
 const totalPriceCalc = (arr) => {
-  return arr.reduce(function(sum, current) {
+  return arr.reduce(function (sum, current) {
     return sum + current.price;
   }, 0);
 };

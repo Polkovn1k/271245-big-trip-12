@@ -122,15 +122,15 @@ const createTimeMarkup = (date) => {
 };
 
 const generateDestinationInfo = (destinationList, target) => {
-  const obj = destinationList.find(item => item.name === target);
+  const obj = destinationList.find((item) => item.name === target);
   return {
     destinationDescription: obj.description,
     destinationPhoto: obj.pictures,
-  }
+  };
 };
 
 const generateOfferItems = (offersList, target) => {
-  return offersList.find(item => item.type === target).offers;
+  return offersList.find((item) => item.type === target).offers;
 };
 
 const createDestinationFieldsMarkup = (type, destinationName) => {
@@ -338,13 +338,13 @@ export default class TripEventEditItem extends SmartView {
   _startDateChangeHandler(startDate) {
     let date = Object
       .assign(
-        {},
-        {
-          startDate: new Date(startDate),
-          endDate: this._data.date.endDate > new Date(startDate)
-            ? this._data.date.endDate
-            : new Date(new Date(startDate).getTime() + 3600000),
-        }
+          {},
+          {
+            startDate: new Date(startDate),
+            endDate: this._data.date.endDate > new Date(startDate)
+              ? this._data.date.endDate
+              : new Date(new Date(startDate).getTime() + 3600000),
+          }
       );
 
     this.updateData({
@@ -355,13 +355,13 @@ export default class TripEventEditItem extends SmartView {
   _endDateChangeHandler(endDate) {
     let date = Object
       .assign(
-        {},
-        {
-          endDate: new Date(endDate),
-          startDate: this._data.date.startDate < new Date(endDate)
-            ? this._data.date.startDate
-            : new Date(new Date(endDate).getTime() - 3600000),
-        }
+          {},
+          {
+            endDate: new Date(endDate),
+            startDate: this._data.date.startDate < new Date(endDate)
+              ? this._data.date.startDate
+              : new Date(new Date(endDate).getTime() - 3600000),
+          }
       );
 
     this.updateData({
@@ -398,10 +398,10 @@ export default class TripEventEditItem extends SmartView {
     if (!this._data.offers.length) {
       this._data = Object
         .assign(
-          this._data,
-          {
-            offers: generateOfferItems(this._offers, `taxi`),
-          }
+            this._data,
+            {
+              offers: generateOfferItems(this._offers, `taxi`),
+            }
         );
     }
     this._callback.formSubmit(this._data);

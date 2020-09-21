@@ -30,7 +30,7 @@ const generateDates = (array) => {
 
 const createMainInfoTemplate = (eventsArray) => {
 
-  const sortedEvents = eventsArray ? eventsArray.slice().sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate)) : '';
+  const sortedEvents = eventsArray ? eventsArray.slice().sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate)) : ``;
 
   return (
     `<div class="trip-info__main">

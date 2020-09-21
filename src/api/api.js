@@ -43,12 +43,12 @@ export default class Api {
 
   getDestinations() {
     return this._load({url: `destinations`})
-      .then(Api.toJSON)
+      .then(Api.toJSON);
   }
 
   getOffers() {
     return this._load({url: `offers`})
-      .then(Api.toJSON)
+      .then(Api.toJSON);
   }
 
   updateTrip(eventData) {
@@ -81,16 +81,16 @@ export default class Api {
   }
 
   _load({
-          url,
-          method = Method.GET,
-          body = null,
-          headers = new Headers()
-        }) {
+    url,
+    method = Method.GET,
+    body = null,
+    headers = new Headers()
+  }) {
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
-      `${this._endPoint}/${url}`,
-      {method, body, headers}
+        `${this._endPoint}/${url}`,
+        {method, body, headers}
     )
       .then(Api.checkStatus)
       .catch(Api.catchError);

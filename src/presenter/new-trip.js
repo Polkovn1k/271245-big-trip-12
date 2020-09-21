@@ -59,6 +59,18 @@ export default class TripNew {
     document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._tripEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._tripEditComponent.shake(resetFormState);
+  }
+
   _handleFormSubmit(trip) {
     this._changeData(
         UserActionType.ADD_TRIP,

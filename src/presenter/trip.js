@@ -7,12 +7,13 @@ import {render, replace, remove} from "../utils/render";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
+  EDITING: `EDITING`,
 };
 
 export const State = {
   SAVING: `SAVING`,
-  DELETING: `DELETING`
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
 };
 
 export default class Trip {
@@ -134,6 +135,14 @@ export default class Trip {
   }
 
   setViewState(state) {
+    const resetFormState = () => {
+      this._tripEventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
     switch (state) {
       case State.SAVING:
         this._tripEventEditComponent.updateData({
@@ -146,6 +155,10 @@ export default class Trip {
           isDisabled: true,
           isDeleting: true
         });
+        break;
+      case State.ABORTING:
+        this._tripEventComponent.shake(resetFormState);
+        this._tripEventEditComponent.shake(resetFormState);
         break;
     }
   }
