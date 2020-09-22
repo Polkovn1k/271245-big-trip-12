@@ -1,4 +1,4 @@
-import {destinationTypeIcons, ACTIVITY_TYPE} from '../const';
+import {destinationTypeIcons, ACTIVITY_TYPES} from '../const';
 
 import AbstractView from "./abstract";
 
@@ -99,7 +99,7 @@ const setTotalMoneyChart = (eventDataList, moneyCtx) => {
 };
 
 const setTransportChart = (eventDataList, transportCtx) => {
-  const transportType = eventDataList.filter((item) => !ACTIVITY_TYPE.includes(item.type)).map((item) => item.type);
+  const transportType = eventDataList.filter((item) => !ACTIVITY_TYPES.includes(item.type)).map((item) => item.type);
   const uniqueTransportType = [...new Set(transportType)];
   const transportTypeCount = uniqueTransportType.map((type) => eventDataList.filter((dataItem) => dataItem.type === type).length);
   const uniqueTransportTypeWithIcons = uniqueTransportType.map((item) => `${destinationTypeIcons[item]} ${item.toUpperCase()}`);

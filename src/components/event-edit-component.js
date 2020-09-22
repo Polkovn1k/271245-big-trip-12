@@ -1,4 +1,4 @@
-import {TRANSFER_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from "../const";
+import {TRANSFER_TYPES, ACTIVITY_TYPES, EVENT_DESTINATIONS, RADIX_VALUE, ONE_HOUR} from "../const";
 
 import SmartView from "./smart";
 
@@ -137,27 +137,27 @@ const createDestinationFieldsMarkup = (type, destinationName) => {
   return (
     `<div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${type ? type : TRANSFER_TYPE[0]} ${type ? checkEventType(type, ACTIVITY_TYPE) : checkEventType(TRANSFER_TYPE[0], ACTIVITY_TYPE)}
+        ${type ? type : TRANSFER_TYPES[0]} ${type ? checkEventType(type, ACTIVITY_TYPES) : checkEventType(TRANSFER_TYPES[0], ACTIVITY_TYPES)}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName ? he.encode(destinationName) : ``}" list="destination-list-1" required>
       <datalist id="destination-list-1">
-        ${generateOptions(EVENT_DESTINATION)}
+        ${generateOptions(EVENT_DESTINATIONS)}
       </datalist>
     </div>`
   );
 };
 
-const createEventTypeListMarkup = (type = TRANSFER_TYPE[0]) => {
+const createEventTypeListMarkup = (type = TRANSFER_TYPES[0]) => {
   return (
     `<div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Transfer</legend>
-        ${generateEventTypeItems(TRANSFER_TYPE, type)}
+        ${generateEventTypeItems(TRANSFER_TYPES, type)}
       </fieldset>
 
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Activity</legend>
-        ${generateEventTypeItems(ACTIVITY_TYPE, type)}
+        ${generateEventTypeItems(ACTIVITY_TYPES, type)}
       </fieldset>
     </div>`
   );
@@ -167,7 +167,7 @@ const createEventTypeBtnMarkup = (type) => {
   return (
     `<label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/${type ? type.toLowerCase() : TRANSFER_TYPE[0].toLowerCase()}.png" alt="Event type icon">
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${type ? type.toLowerCase() : TRANSFER_TYPES[0].toLowerCase()}.png" alt="Event type icon">
     </label>
     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">`
   );
@@ -343,7 +343,7 @@ export default class TripEventEditItem extends SmartView {
             startDate: new Date(startDate),
             endDate: this._data.date.endDate > new Date(startDate)
               ? this._data.date.endDate
-              : new Date(new Date(startDate).getTime() + 3600000),
+              : new Date(new Date(startDate).getTime() + ONE_HOUR),
           }
       );
 
@@ -360,7 +360,7 @@ export default class TripEventEditItem extends SmartView {
             endDate: new Date(endDate),
             startDate: this._data.date.startDate < new Date(endDate)
               ? this._data.date.startDate
-              : new Date(new Date(endDate).getTime() - 3600000),
+              : new Date(new Date(endDate).getTime() - ONE_HOUR),
           }
       );
 
@@ -371,7 +371,7 @@ export default class TripEventEditItem extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const index = EVENT_DESTINATION.findIndex((item) => evt.target.value === item);
+    const index = EVENT_DESTINATIONS.findIndex((item) => evt.target.value === item);
     if (index === -1) {
       evt.currentTarget.setCustomValidity(`Ты поехавший? Выбери из списка городов!`);
       return;
@@ -384,7 +384,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _priceInputHandler(evt) {
-    const value = Number.parseInt(evt.target.value, 10);
+    const value = Number.parseInt(evt.target.value, RADIX_VALUE);
     if (isNaN(value)) {
       return;
     }

@@ -1,8 +1,10 @@
-import {UserActionType, DataUpdateType, RenderPosition} from "../const";
+import {UserActionType, DataUpdateType, RenderPosition, ONE_HOUR} from "../const";
 
 import TripEventEditComponent from "../components/event-edit-component";
 
 import {remove, render} from "../utils/render";
+
+const DEFAULT_PRICE = 1;
 
 const defaultData = {
   type: `taxi`,
@@ -12,10 +14,10 @@ const defaultData = {
     destinationDescription: null,
     destinationPhoto: null,
   },
-  price: 1,
+  price: DEFAULT_PRICE,
   date: {
     startDate: new Date(),
-    endDate: new Date(new Date().getTime() + 3600000),
+    endDate: new Date(new Date().getTime() + ONE_HOUR),
   },
   isFavorite: null,
   addMode: true,

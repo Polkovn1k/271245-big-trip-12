@@ -1,10 +1,11 @@
 import {getDurationDate} from "./date-time";
+import {RADIX_VALUE} from "../const";
 
 const calcPrice = (eventDataList, type) => {
   let priceSum = 0;
   const price = eventDataList.reduce((acc, item) => {
     if (item.type === type) {
-      priceSum += parseInt(item.price, 10);
+      priceSum += parseInt(item.price, RADIX_VALUE);
       acc[item.type] = priceSum;
     }
     return acc;

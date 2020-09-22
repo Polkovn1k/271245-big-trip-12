@@ -1,4 +1,8 @@
-const TRANSFER_TYPE = [
+const RADIX_VALUE = 10;
+
+const ONE_HOUR = 3600000;
+
+const TRANSFER_TYPES = [
   `taxi`,
   `bus`,
   `train`,
@@ -8,13 +12,13 @@ const TRANSFER_TYPE = [
   `flight`,
 ];
 
-const ACTIVITY_TYPE = [
+const ACTIVITY_TYPES = [
   `check-in`,
   `sightseeing`,
   `restaurant`
 ];
 
-const EVENT_DESTINATION = [
+const EVENT_DESTINATIONS = [
   `Chamonix`,
   `Geneva`,
   `Amsterdam`,
@@ -73,12 +77,6 @@ const destinationTypeIcons = {
   'restaurant': `🍴`,
 };
 
-const RandomPriceSettings = {
-  MIN_PRICE: 1000,
-  MAX_PRICE: 10000,
-  MULTIPLE: 10,
-};
-
 const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
   AFTERBEGIN: `afterbegin`,
@@ -122,14 +120,14 @@ const State = {
   ABORTING: `ABORTING`,
 };
 
-
 export {
-  TRANSFER_TYPE,
-  ACTIVITY_TYPE,
-  EVENT_DESTINATION,
+  RADIX_VALUE,
+  ONE_HOUR,
+  TRANSFER_TYPES,
+  ACTIVITY_TYPES,
+  EVENT_DESTINATIONS,
   MONTH_NAMES,
   destinationTypeIcons,
-  RandomPriceSettings,
   RenderPosition,
   ItemSortType,
   UserActionType,

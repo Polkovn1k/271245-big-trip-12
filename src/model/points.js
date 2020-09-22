@@ -1,3 +1,4 @@
+import {RADIX_VALUE} from "../const";
 import Observer from "../utils/observer";
 
 export default class Points extends Observer {
@@ -60,7 +61,7 @@ export default class Points extends Observer {
         {},
         eventData,
         {
-          id: Number.parseInt(eventData.id, 10),
+          id: Number.parseInt(eventData.id, RADIX_VALUE),
           isFavorite: eventData.is_favorite,
           destinationName: eventData.destination.name,
           destinationInfo: {

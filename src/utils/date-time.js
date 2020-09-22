@@ -1,6 +1,8 @@
 import moment from "moment";
 
-const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
+const DEPTH_VALUE = 10;
+
+const castTimeFormat = (value) => value < DEPTH_VALUE ? `0${value}` : String(value);
 
 const formatTime = (date) => moment(date).format(`hh:mm`);
 
