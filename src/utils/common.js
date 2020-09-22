@@ -1,18 +1,4 @@
-const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-const getRandomItemsFromArray = (arr, quantity) => {
-  const randomItems = arr.map(() => getRandomItemFromArray(arr)).slice(0, quantity);
-
-  return removeDuplicatesFromArray(randomItems);
-};
-
-const getRandom = (max, min = 1) => Math.random() * (max - min) + min;
-
-const getRandomInt = (max, min = 1) => Math.floor(Math.random() * (max - min)) + min;
-
-const removeDuplicatesFromArray = (arr) => Array.from(new Set(arr));
-
-const getRandomNumberFromInterval = (min, max, mult) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / mult) * mult;
+import moment from "moment";
 
 const checkEventType = (type, arr) => {
   const isActivityType = arr.some((item) => item === type);
@@ -20,30 +6,19 @@ const checkEventType = (type, arr) => {
   return isActivityType ? `in` : `to`;
 };
 
-const updateItem = (array, updItem) => {
-  const index = array.findIndex((item) => item.id === updItem.id);
+const getTripDaysString = (item) => (`${moment(item.date.startDate).format(`YYYY-M-D`)}`);
 
-  if (index === -1) {
-    return array;
-  }
+const generateTripDays = (eventArr) => {
+  let tripDays = eventArr
+    .slice()
+    .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate))
+    .map((item) => getTripDaysString(item));
 
-  return [
-    ...array.slice(0, index),
-    updItem,
-    ...array.slice(index + 1)
-  ];
+  return [...new Set(tripDays)];
 };
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
-
 export {
-  getRandomItemFromArray,
-  getRandomItemsFromArray,
-  getRandom,
-  getRandomInt,
-  removeDuplicatesFromArray,
-  getRandomNumberFromInterval,
   checkEventType,
-  updateItem,
-  generateId,
+  generateTripDays,
+  getTripDaysString,
 };

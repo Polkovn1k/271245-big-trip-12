@@ -3,7 +3,6 @@ import {UserActionType, DataUpdateType, RenderPosition} from "../const";
 import TripEventEditComponent from "../components/event-edit-component";
 
 import {remove, render} from "../utils/render";
-import {generateId} from "../utils/common";
 
 const defaultData = {
   type: `taxi`,
@@ -60,6 +59,18 @@ export default class TripNew {
     document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._tripEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._tripEditComponent.shake(resetFormState);
+  }
+
   _handleFormSubmit(trip) {
     this._changeData(
         UserActionType.ADD_TRIP,
@@ -71,11 +82,16 @@ export default class TripNew {
               {
                 isFavorite: false,
                 addMode: false,
-                id: generateId(),
               }
           )
     );
-    this.destroy();
+  }
+
+  setSaving() {
+    this._tripEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
   }
 
   _handleDeleteClick() {

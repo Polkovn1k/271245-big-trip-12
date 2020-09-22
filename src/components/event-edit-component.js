@@ -122,15 +122,15 @@ const createTimeMarkup = (date) => {
 };
 
 const generateDestinationInfo = (destinationList, target) => {
-  const obj = destinationList.find(item => item.name === target);
+  const obj = destinationList.find((item) => item.name === target);
   return {
     destinationDescription: obj.description,
     destinationPhoto: obj.pictures,
-  }
+  };
 };
 
 const generateOfferItems = (offersList, target) => {
-  return offersList.find(item => item.type === target).offers;
+  return offersList.find((item) => item.type === target).offers;
 };
 
 const createDestinationFieldsMarkup = (type, destinationName) => {
@@ -186,11 +186,21 @@ const createEventDetailMarkup = (offers, destinationName, destinationInfo) => {
     );
   }
   return ``;
+};
 
+const createSaveBtn = (isDisabled, isSaving) => {
+  return `<button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving…` : `Save`}</button>`;
+};
+
+const createCancelBtn = (addMode, isDeleting) => {
+  if (addMode) {
+    return `<button class="event__reset-btn" type="reset">Cancel</button>`;
+  }
+  return `<button class="event__reset-btn" type="reset">${isDeleting ? `Deleting…` : `Delete`}</button>`;
 };
 
 const createEventEditTemplate = (objData) => {
-  const {type, destinationName, offers, destinationInfo, price, date, isFavorite, addMode} = objData;
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite, addMode, isDisabled, isSaving, isDeleting} = objData;
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -204,8 +214,8 @@ const createEventEditTemplate = (objData) => {
         ${createTimeMarkup(date)}
         ${createPriceMarkup(price)}
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">${addMode ? `Cancel` : `Delete`}</button>
+        ${createSaveBtn(isDisabled, isSaving)}
+        ${createCancelBtn(addMode, isDeleting)}
 
         ${isFavorite !== null ? createFavoriteMarkup(isFavorite) : ``}
 
@@ -309,9 +319,6 @@ export default class TripEventEditItem extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: generateOfferItems(this._offers, evt.target.value),
-      /*offers: this._data.offers.length
-        ? generateOfferItems(this._offers, evt.target.value)
-        : generateOfferItems(this._offers, `taxi`),*/
     });
   }
 
@@ -391,10 +398,10 @@ export default class TripEventEditItem extends SmartView {
     if (!this._data.offers.length) {
       this._data = Object
         .assign(
-          this._data,
-          {
-            offers: generateOfferItems(this._offers, `taxi`),
-          }
+            this._data,
+            {
+              offers: generateOfferItems(this._offers, `taxi`),
+            }
         );
     }
     this._callback.formSubmit(this._data);

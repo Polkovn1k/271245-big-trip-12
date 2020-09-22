@@ -1,4 +1,4 @@
-import {RenderPosition, UserActionType, DataUpdateType} from "../const";
+import {RenderPosition, UserActionType, DataUpdateType, State} from "../const";
 
 import TripEventItem from "../components/trip-event-item-component";
 import TripEventEditItem from "../components/event-edit-component";
@@ -7,7 +7,7 @@ import {render, replace, remove} from "../utils/render";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
+  EDITING: `EDITING`,
 };
 
 export default class Trip {
@@ -52,7 +52,8 @@ export default class Trip {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._tripEventEditComponent, prevEventEditComponent);
+      replace(this._tripEventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -78,7 +79,6 @@ export default class Trip {
         DataUpdateType.MINOR,
         data
     );
-    this._replaceEditToEvent();
   }
 
   _handleFavoriteChange() {
@@ -125,6 +125,35 @@ export default class Trip {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceEditToEvent();
+    }
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._tripEventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._tripEventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._tripEventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._tripEventComponent.shake(resetFormState);
+        this._tripEventEditComponent.shake(resetFormState);
+        break;
     }
   }
 }

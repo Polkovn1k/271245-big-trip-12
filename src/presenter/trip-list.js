@@ -1,4 +1,4 @@
-import {RenderPosition, ItemSortType, DataUpdateType, UserActionType} from "../const";
+import {RenderPosition, ItemSortType, DataUpdateType, UserActionType, State as TripPresenterViewState} from "../const";
 
 import Sort from "../components/sort-component";
 import TripPresenter from "./trip";
@@ -13,7 +13,7 @@ import Cost from "../components/cost-component";
 import MainInfo from "../components/main-info-component";
 import Loading from "../components/loading";
 
-import {generateTripDays, getTripDaysString} from "../mock-data/trip-event-date-data";
+import {generateTripDays, getTripDaysString} from "../utils/common";
 import {render, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
@@ -75,18 +75,34 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserActionType.UPDATE_TRIP:
-        this._tripModel.updateTrip(updateType, update);
-
+        this._tripPresenterObserver[update.id].setViewState(TripPresenterViewState.SAVING);
         this._api.updateTrip(update)
           .then((response) => {
             this._tripModel.updateTrip(updateType, response);
-        });
+          })
+          .catch(() => {
+            this._tripPresenterObserver[update.id].setViewState(TripPresenterViewState.ABORTING);
+          });
         break;
       case UserActionType.ADD_TRIP:
-        this._tripModel.addTrip(updateType, update);
+        this._newTripPresenter.setSaving();
+        this._api.addTrip(update)
+          .then((response) => {
+            this._tripModel.addTrip(updateType, response);
+          })
+          .catch(() => {
+            this._newTripPresenter.setAborting();
+          });
         break;
       case UserActionType.DELETE_TRIP:
-        this._tripModel.deleteTrip(updateType, update);
+        this._tripPresenterObserver[update.id].setViewState(TripPresenterViewState.DELETING);
+        this._api.deleteTrip(update)
+          .then(() => {
+            this._tripModel.deleteTrip(updateType, update);
+          })
+          .catch(() => {
+            this._tripPresenterObserver[update.id].setViewState(TripPresenterViewState.ABORTING);
+          });
         break;
     }
   }
@@ -158,7 +174,7 @@ export default class Trip {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderTripEventItem(eventsContainer, currentDayEvent, optionsData) {
+  _renderTripEventItem(eventsContainer, currentDayEvent) {
     const tripPresenter = new TripPresenter(eventsContainer, this._handleViewAction, this._handleModeChange);
     tripPresenter.init(currentDayEvent, this._optionsModel);
     this._tripPresenterObserver[currentDayEvent.id] = tripPresenter;

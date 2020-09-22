@@ -116,6 +116,12 @@ const MenuItem = {
   STATS: `Stats`,
 };
 
+const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
 
 export {
   TRANSFER_TYPE,
@@ -130,4 +136,5 @@ export {
   DataUpdateType,
   FilterChangeType,
   MenuItem,
+  State,
 };
