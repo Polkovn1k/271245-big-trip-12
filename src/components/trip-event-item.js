@@ -5,10 +5,13 @@ import AbstractView from "./abstract";
 import {checkEventType} from "../utils/common";
 import {formatTime, timeDuration} from "../utils/date-time";
 
+const MIN_OFFERS = 0;
+const MAX_OFFERS = 3;
 
 const getEventSelectedOffersTemplate = (offerData) => {
   return offerData
     .filter((item) => item.checked)
+    .slice(MIN_OFFERS, MAX_OFFERS)
     .map((item) => (
       `<li class="event__offer">
         <span class="event__offer-title">${item.title}</span>
