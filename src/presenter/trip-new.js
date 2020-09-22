@@ -1,6 +1,6 @@
 import {UserActionType, DataUpdateType, RenderPosition, ONE_HOUR} from "../const";
 
-import TripEventEditComponent from "../components/event-edit-component";
+import TripEventEditComponent from "../components/trip-event-edit-item";
 
 import {remove, render} from "../utils/render";
 

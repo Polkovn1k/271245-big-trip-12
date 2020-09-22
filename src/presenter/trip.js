@@ -1,7 +1,7 @@
 import {RenderPosition, UserActionType, DataUpdateType, State} from "../const";
 
-import TripEventItem from "../components/trip-event-item-component";
-import TripEventEditItem from "../components/event-edit-component";
+import TripEventItem from "../components/trip-event-item";
+import TripEventEditItem from "../components/trip-event-edit-item";
 
 import {render, replace, remove} from "../utils/render";
 

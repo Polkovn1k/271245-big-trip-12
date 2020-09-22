@@ -1,10 +1,10 @@
 import {RenderPosition, MenuItem, DataUpdateType, FilterChangeType} from './const';
 
-import Menu from './components/menu-component';
+import Menu from './components/menu';
 import Statistics from "./components/statistics";
 
 import TripsPresenter from './presenter/trip-list';
-import FilterPresenter from "./presenter/filter";
+import FilterPresenter from "./presenter/filters";
 
 import TripModel from "./model/points";
 import OptionsModel from "./model/options";

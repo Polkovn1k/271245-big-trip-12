@@ -1,11 +1,11 @@
 import {FilterChangeType, DataUpdateType, RenderPosition} from "../const";
 
-import FilterView from "../components/filter-component";
+import Filter from "../components/filter";
 
 import {render, replace, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
-export default class Filter {
+export default class Filters {
   constructor(filterContainer, filterModel, tripModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
@@ -27,7 +27,7 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
+    this._filterComponent = new Filter(filters, this._currentFilter);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {

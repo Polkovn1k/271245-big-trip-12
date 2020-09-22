@@ -1,23 +1,23 @@
 import {RenderPosition, ItemSortType, DataUpdateType, UserActionType, State as TripPresenterViewState} from "../const";
 
-import Sort from "../components/sort-component";
+import Sort from "../components/sort";
 import TripPresenter from "./trip";
-import NewTripPresenter from "./new-trip";
+import NewTripPresenter from "./trip-new";
 
-import TripDaysList from "../components/trip-days-list-component";
-import TripDaysItem from "../components/trip-days-item-component";
-import TripEventList from "../components/trip-events-list-component";
-import NoPoints from "../components/no-points-component";
-import InfoContainer from "../components/info-container-component";
-import Cost from "../components/cost-component";
-import MainInfo from "../components/main-info-component";
+import TripDaysList from "../components/trip-days-list";
+import TripDaysItem from "../components/trip-days-item";
+import TripEventList from "../components/trip-event-list";
+import NoPoints from "../components/no-points";
+import InfoContainer from "../components/info-container";
+import Cost from "../components/cost";
+import MainInfo from "../components/main-info";
 import Loading from "../components/loading";
 
 import {generateTripDays, getTripDaysString} from "../utils/common";
 import {render, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 
-export default class Trip {
+export default class TripList {
   constructor(container, tripModel, filterModel, optionsModel, api) {
     this._tripModel = tripModel;
     this._filterModel = filterModel;
