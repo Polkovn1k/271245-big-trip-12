@@ -1,4 +1,4 @@
-import {RenderPosition, UserActionType, DataUpdateType} from "../const";
+import {RenderPosition, UserActionType, DataUpdateType, State} from "../const";
 
 import TripEventItem from "../components/trip-event-item-component";
 import TripEventEditItem from "../components/event-edit-component";
@@ -8,12 +8,6 @@ import {render, replace, remove} from "../utils/render";
 const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`,
-};
-
-export const State = {
-  SAVING: `SAVING`,
-  DELETING: `DELETING`,
-  ABORTING: `ABORTING`,
 };
 
 export default class Trip {

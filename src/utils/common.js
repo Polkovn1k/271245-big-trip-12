@@ -1,10 +1,12 @@
+import moment from "moment";
+
 const checkEventType = (type, arr) => {
   const isActivityType = arr.some((item) => item === type);
 
   return isActivityType ? `in` : `to`;
 };
 
-const getTripDaysString = (item) => (`${item.date.startDate.getFullYear()}-${item.date.startDate.getMonth() + 1}-${item.date.startDate.getDate()}`);
+const getTripDaysString = (item) => (`${moment(item.date.startDate).format(`YYYY-M-D`)}`);
 
 const generateTripDays = (eventArr) => {
   let tripDays = eventArr

@@ -1,7 +1,7 @@
-import {RenderPosition, ItemSortType, DataUpdateType, UserActionType} from "../const";
+import {RenderPosition, ItemSortType, DataUpdateType, UserActionType, State as TripPresenterViewState} from "../const";
 
 import Sort from "../components/sort-component";
-import TripPresenter, {State as TripPresenterViewState} from "./trip";
+import TripPresenter from "./trip";
 import NewTripPresenter from "./new-trip";
 
 import TripDaysList from "../components/trip-days-list-component";
