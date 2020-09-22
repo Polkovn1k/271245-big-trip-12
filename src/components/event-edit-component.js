@@ -324,7 +324,7 @@ export default class TripEventEditItem extends SmartView {
 
   _offersChangeHandler(evt) {
     evt.preventDefault();
-    let offers = this._data.offers.map((item, i) => {
+    const offers = this._data.offers.map((item, i) => {
       if (+evt.currentTarget.dataset.id === i) {
         item.checked = evt.currentTarget.checked;
       }
@@ -336,7 +336,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _startDateChangeHandler(startDate) {
-    let date = Object
+    const date = Object
       .assign(
           {},
           {
@@ -353,7 +353,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _endDateChangeHandler(endDate) {
-    let date = Object
+    const date = Object
       .assign(
           {},
           {
@@ -384,7 +384,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _priceInputHandler(evt) {
-    let value = Number.parseInt(evt.target.value, 10);
+    const value = Number.parseInt(evt.target.value, 10);
     if (isNaN(value)) {
       return;
     }
