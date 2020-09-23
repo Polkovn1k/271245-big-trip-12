@@ -60,6 +60,26 @@ export default class Trip {
     remove(prevEventEditComponent);
   }
 
+  reInit(tripData) {
+    this._data = tripData;
+
+    const prevEditComponent = this._tripEventEditComponent;
+
+    this._tripEventComponent = new TripEventItem(tripData);
+    this._tripEventEditComponent = new TripEventEditItem(tripData, this._optionsModel);
+
+    this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
+    this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._tripEventEditComponent.setFavoriteChangeHandler(this._handleFavoriteChange);
+    this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+
+    if (this._mode === Mode.EDITING) {
+      replace(this._tripEventEditComponent, prevEditComponent);
+    }
+
+    remove(prevEditComponent);
+  }
+
   _handleEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 

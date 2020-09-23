@@ -395,7 +395,7 @@ export default class TripEventEditItem extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    if (!this._data.offers.length) {
+    if (!this._data.offers.length && this._data.addMode) {
       this._data = Object
         .assign(
             this._data,
