@@ -84,6 +84,7 @@ export default class Trip {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      this._tripEventEditComponent.reset(this._data);
       this._replaceEditToEvent();
     }
   }

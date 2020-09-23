@@ -253,6 +253,13 @@ export default class TripEventEditItem extends SmartView {
     this._setDatePickers();
   }
 
+  reset(data) {
+    this._data = data;
+    this.updateData({
+      data,
+    });
+  }
+
   removeElement() {
     super.removeElement();
     if (this._flatpickrStart && this._flatpickrEnd) {
@@ -264,6 +271,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   getTemplate() {
+    console.log(11111111);
     return createEventEditTemplate(this._data);
   }
 
