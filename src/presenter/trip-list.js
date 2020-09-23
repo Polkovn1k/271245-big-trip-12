@@ -110,7 +110,7 @@ export default class TripList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case DataUpdateType.PATCH:
-        this._tripPresenterObserver[data.id].init(data);
+        this._tripPresenterObserver[data.id].init(data, this._optionsModel);
         break;
       case DataUpdateType.MINOR:
         this._clearMainTripList();

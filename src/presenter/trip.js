@@ -35,7 +35,7 @@ export default class Trip {
     const prevEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventItem(tripData);
-    this._tripEventEditComponent = new TripEventEditItem(tripData, options);
+    this._tripEventEditComponent = new TripEventEditItem(tripData, this._optionsModel);
 
     this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
