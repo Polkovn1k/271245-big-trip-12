@@ -1,4 +1,4 @@
-const RADIX_VALUE = 10;
+const SCALE_VALUE = 10;
 
 const ONE_HOUR = 3600000;
 
@@ -121,7 +121,7 @@ const State = {
 };
 
 export {
-  RADIX_VALUE,
+  SCALE_VALUE,
   ONE_HOUR,
   TRANSFER_TYPES,
   ACTIVITY_TYPES,

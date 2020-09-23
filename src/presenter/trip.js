@@ -34,13 +34,7 @@ export default class Trip {
     const prevEventComponent = this._tripEventComponent;
     const prevEventEditComponent = this._tripEventEditComponent;
 
-    this._tripEventComponent = new TripEventItem(tripData);
-    this._tripEventEditComponent = new TripEventEditItem(tripData, this._optionsModel);
-
-    this._tripEventComponent.setRollupClickHandler(this._handleEditClick);
-    this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._tripEventEditComponent.setFavoriteChangeHandler(this._handleFavoriteChange);
-    this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._setHandlers(tripData);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._container, this._tripEventComponent, RenderPosition.BEFOREEND);
@@ -65,6 +59,16 @@ export default class Trip {
 
     const prevEditComponent = this._tripEventEditComponent;
 
+    this._setHandlers(tripData);
+
+    if (this._mode === Mode.EDITING) {
+      replace(this._tripEventEditComponent, prevEditComponent);
+    }
+
+    remove(prevEditComponent);
+  }
+
+  _setHandlers(tripData) {
     this._tripEventComponent = new TripEventItem(tripData);
     this._tripEventEditComponent = new TripEventEditItem(tripData, this._optionsModel);
 
@@ -72,12 +76,6 @@ export default class Trip {
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventEditComponent.setFavoriteChangeHandler(this._handleFavoriteChange);
     this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
-
-    if (this._mode === Mode.EDITING) {
-      replace(this._tripEventEditComponent, prevEditComponent);
-    }
-
-    remove(prevEditComponent);
   }
 
   _handleEscKeyDown(evt) {

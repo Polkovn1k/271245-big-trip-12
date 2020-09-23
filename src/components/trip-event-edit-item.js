@@ -1,4 +1,4 @@
-import {TRANSFER_TYPES, ACTIVITY_TYPES, EVENT_DESTINATIONS, RADIX_VALUE, ONE_HOUR} from "../const";
+import {TRANSFER_TYPES, ACTIVITY_TYPES, EVENT_DESTINATIONS, SCALE_VALUE, ONE_HOUR} from "../const";
 
 import SmartView from "./smart";
 
@@ -271,7 +271,6 @@ export default class TripEventEditItem extends SmartView {
   }
 
   getTemplate() {
-    console.log(11111111);
     return createEventEditTemplate(this._data);
   }
 
@@ -392,7 +391,7 @@ export default class TripEventEditItem extends SmartView {
   }
 
   _priceInputHandler(evt) {
-    const value = Number.parseInt(evt.target.value, RADIX_VALUE);
+    const value = Number.parseInt(evt.target.value, SCALE_VALUE);
     if (isNaN(value)) {
       return;
     }
